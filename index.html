@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>AZISAI Official</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AZISAI - Exclusive wager races on Roobet with code AZISAI07219!">
+  <meta property="og:image" content="https://i.ibb.co/4nVwRPbj/Screenshot-2025-05-14-093458.png">
+  <link rel="icon" type="image/jpg" href="/assets/logo.png">
+  <link rel="stylesheet" href="/css/leaderboard.css">
+</head>
+<body>
+
+<div class="bg-animation">
+  <div class="bg-orb blue"></div>
+  <div class="bg-orb purple"></div>
+  <div class="bg-orb cyan"></div>
+  <div class="bg-orb deep"></div>
+</div>
+<div class="hex-grid"></div>
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <header>
+    <a href="/" class="logo-section">
+      <img src="/assets/logo.png" alt="AZISAI">
+      <h1>AZISAI</h1>
+    </a>
+    <nav class="nav-links">
+      <a href="/" class="active" data-i18n="navHome">ホーム</a>
+      <a href="/leaderboard/roobet" data-i18n="navLb">リーダーボード</a>
+      <a href="/notes" data-i18n="navNotes">ノート</a>
+    </nav>
+    <div class="header-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="ja">日本語</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <img src="/assets/logo.png" alt="AZISAI" class="platform-logo">
+    <h1 class="hero-title">
+      <span class="gold">AZISAI</span> <span data-i18n="heroWelcome">スコアボード</span>
+    </h1>
+    <p class="hero-subtitle" data-i18n="heroDesc">Roobetの限定リーダーボードに参加して、最大$10,000の賞金を獲得しましょう！</p>
+
+    <div class="prize-pool-badge">
+      <span style="color:var(--az-text-dim);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Space Grotesk',sans-serif" data-i18n="monthlyPrize">月間賞金</span>
+      <span class="amount">$10,000</span>
+    </div>
+
+    <div class="hero-buttons">
+      <a href="/leaderboard/roobet" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span data-i18n="viewLb">リーダーボードを見る</span>
+      </a>
+      <a href="https://roobet.com/?ref=azisai07219" target="_blank" class="btn btn-dark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span data-i18n="signupRoobet">Roobetに登録</span>
+      </a>
+      <button class="btn btn-dark" id="weeklyBonusBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-i18n="weeklyBonus">週間ボーナス</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="home-card" style="text-align:center;">
+      <div class="home-feature-icon" style="background:rgba(var(--az-primary-rgb),0.15);margin:0 auto 16px;">
+        <img src="/assets/roobet_crystal.png" alt="Roobet" style="width:48px;height:48px;border-radius:10px;">
+      </div>
+      <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;" data-i18n="roobetCard">Roobet アフィリエイト</h3>
+      <p style="color:var(--az-text-dim);font-size:14px;margin-bottom:20px;" data-i18n="roobetDesc">コードを使用して登録し、限定特典を受け取りましょう。</p>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--az-text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-family:'Space Grotesk',sans-serif;" data-i18n="codeLabel">招待コード</div>
+        <div class="affiliate-code">azisai07219</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:20px;">
+        <div class="feature-item">
+          <span class="check">&#10003;</span>
+          <span data-i18n="feat1">月間$10,000リーダーボード</span>
+        </div>
+        <div class="feature-item">
+          <span class="check">&#10003;</span>
+          <span data-i18n="feat2">週間賭け金ボーナス</span>
+        </div>
+        <div class="feature-item">
+          <span class="check">&#10003;</span>
+          <span data-i18n="feat3">限定コミュニティアクセス</span>
+        </div>
+      </div>
+      <a href="https://roobet.com/?ref=azisai07219" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;">
+        <span data-i18n="signupNow">今すぐ登録</span>
+      </a>
+    </div>
+
+    <div class="home-card">
+      <div class="home-feature-icon" style="background:rgba(16,185,129,0.15);margin-bottom:16px;">
+        <span style="font-size:24px;">&#x1F4B0;</span>
+      </div>
+      <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;" data-i18n="weeklyCard">週間ボーナス</h3>
+      <p style="color:var(--az-text-dim);font-size:14px;margin-bottom:16px;" data-i18n="weeklyDesc">毎週の賭け額に応じてボーナスを獲得できます。</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+        <div class="weekly-tier"><span class="weekly-tier__wager">$1,000</span><span class="weekly-tier__reward">$10</span></div>
+        <div class="weekly-tier"><span class="weekly-tier__wager">$5,000</span><span class="weekly-tier__reward">$50</span></div>
+        <div class="weekly-tier"><span class="weekly-tier__wager">$50,000+</span><span class="weekly-tier__reward">$400</span></div>
+      </div>
+      <div style="text-align:center;padding:10px;border-radius:10px;background:var(--az-surface);border:1px solid var(--az-surface-border);">
+        <div id="home-weekly-dates" style="font-size:11px;color:var(--az-accent);margin-bottom:4px;font-family:'Space Grotesk',sans-serif;"></div>
+        <div style="font-size:11px;color:var(--az-text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" data-i18n="weeklyReset">リセットまで</div>
+        <div id="home-weekly-cd" style="font-size:18px;font-weight:700;color:#10b981;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="socials-section">
+    <div class="socials-title" data-i18n="socialsTitle">フォローしてください</div>
+    <div class="social-media-cards">
+      <a href="https://roobet.com/?ref=azisai07219" target="_blank" class="card discord">
+        <img src="/image-removebg-preview (90).png" alt="Roobet Logo" class="icon">
+        <span>Roobet</span>
+      </a>
+      <a href="https://kick.com/azisaikick" target="_blank" class="card kick">
+        <img src="/assets/kick.png" alt="Kick Logo" class="icon">
+        <span>@Azisaikick</span>
+      </a>
+      <a href="https://youtube.com/@azisaikickakaibu" target="_blank" class="card kick">
+        <img src="/image-removebg-preview (86).png" alt="Kick Logo" class="icon">
+        <span>@Azisaikickakaibu</span>
+      </a>
+      <a href="https://x.com/marusai205" target="_blank" class="card discord">
+        <img src="/assets/x.png" alt="X Logo" class="icon">
+        <span>@marusai205</span>
+      </a>
+      <a href="https://youtube.com/@azisai-onkazi-kirinuki" target="_blank" class="card youtube">
+        <img src="/assets/youtube.png" alt="YouTube Logo" class="icon">
+        <span>@azisai-onkazi-kirinuki</span>
+      </a>
+      <a href="https://discord.gg/azisai" target="_blank" class="card discord">
+        <img src="/assets/discord.png" alt="Discord Logo" class="icon">
+        <span>@azisai</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-warning" data-i18n="footerWarning">ギャンブルは自己責任で楽しんでください。未成年者のギャンブルは法律で禁止されています。</div>
+    <div>AZISAI &copy; 2026</div>
+  </footer>
+</div>
+
+<div id="stats-widget" class="stats-widget">
+  <div class="stats-widget-header" id="stats-drag">
+    <span data-i18n="statsTitle">&#x1F4CA; 統計チェック</span>
+    <button class="stats-widget-close" id="stats-close">&times;</button>
+  </div>
+  <div class="stats-widget-body">
+    <input type="text" id="usernameInput" data-placeholder-ja="Roobetユーザー名" data-placeholder-en="Roobet Username" placeholder="Roobetユーザー名">
+    <button onclick="fetchUserStats()" data-i18n="checkStats">統計を確認</button>
+    <div id="resultBox" class="stats-result"></div>
+  </div>
+</div>
+<button id="stats-minimized" class="minimized-btn">&#x1F4CA;</button>
+
+<div class="modal-overlay" id="weeklyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" data-i18n="weeklyTitle">週間賭け金ボーナス</span>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="weekly-tier"><span class="weekly-tier__wager" data-i18n="wb1k">$1,000 ベット</span><span class="weekly-tier__reward">$10</span></div>
+      <div class="weekly-tier"><span class="weekly-tier__wager" data-i18n="wb5k">$5,000 ベット</span><span class="weekly-tier__reward">$50</span></div>
+      <div class="weekly-tier"><span class="weekly-tier__wager" data-i18n="wb50k">$50,000+ ベット</span><span class="weekly-tier__reward">$400</span></div>
+      <div style="text-align:center;margin:16px 0;padding:12px;border-radius:10px;background:var(--az-surface);">
+        <div style="font-size:12px;color:var(--az-text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" data-i18n="weeklyEnds">週間リセットまで</div>
+        <div id="modal-weekly-cd" style="font-size:20px;font-weight:700;color:#fff;"></div>
+      </div>
+      <div class="winners-section">
+        <h4 data-i18n="winners10">$10 当選者</h4>
+        <ul class="winners-list" id="names-1000"><li class="winners-list--empty" data-i18n="noWinners">該当者なし</li></ul>
+        <h4 data-i18n="winners50">$50 当選者</h4>
+        <ul class="winners-list" id="names-5000"><li class="winners-list--empty" data-i18n="noWinners">該当者なし</li></ul>
+        <h4 data-i18n="winners400">$400 当選者</h4>
+        <ul class="winners-list" id="names-50000"><li class="winners-list--empty" data-i18n="noWinners">該当者なし</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var currentLang = 'ja';
+
+  var T = {
+    ja: {
+      navHome:'ホーム', navLb:'リーダーボード', navNotes:'ノート',
+      heroWelcome:'スコアボード',
+      heroDesc:'Roobetの限定リーダーボードに参加して、最大$10,000の賞金を獲得しましょう！',
+      monthlyPrize:'月間賞金',
+      viewLb:'リーダーボードを見る', signupRoobet:'Roobetに登録',
+      weeklyBonus:'週間ボーナス',
+      roobetCard:'Roobet アフィリエイト',
+      roobetDesc:'コードを使用して登録し、限定特典を受け取りましょう。',
+      codeLabel:'招待コード',
+      feat1:'月間$10,000リーダーボード', feat2:'週間賭け金ボーナス', feat3:'限定コミュニティアクセス',
+      signupNow:'今すぐ登録',
+      lbCard:'リーダーボード',
+      lbDesc:'毎月のリーダーボードで競い合い、賭け額に応じた報酬を獲得しましょう。',
+      days:'日', hours:'時間', minutes:'分', seconds:'秒',
+      goToLb:'リーダーボードへ',
+      weeklyCard:'週間ボーナス',
+      weeklyDesc:'毎週の賭け額に応じてボーナスを獲得できます。',
+      weeklyReset:'リセットまで',
+      socialsTitle:'フォローしてください',
+      footerWarning:'ギャンブルは自己責任で楽しんでください。未成年者のギャンブルは法律で禁止されています。',
+      statsTitle:'\ud83d\udcca 統計チェック', checkStats:'統計を確認',
+      weeklyTitle:'週間賭け金ボーナス',
+      wb1k:'$1,000 ベット', wb5k:'$5,000 ベット', wb50k:'$50,000+ ベット',
+      weeklyEnds:'週間リセットまで',
+      winners10:'$10 当選者', winners50:'$50 当選者', winners400:'$400 当選者',
+      noWinners:'該当者なし'
+    },
+    en: {
+      navHome:'Home', navLb:'Leaderboard', navNotes:'Notes',
+      heroWelcome:'Scoreboard',
+      heroDesc:'Join the exclusive Roobet leaderboard and win up to $10,000 in prizes!',
+      monthlyPrize:'Monthly Prize',
+      viewLb:'View Leaderboard', signupRoobet:'Sign up on Roobet',
+      weeklyBonus:'Weekly Bonus',
+      roobetCard:'Roobet Affiliate',
+      roobetDesc:'Sign up with our code to unlock exclusive perks and rewards.',
+      codeLabel:'Invite Code',
+      feat1:'$10,000 Monthly Leaderboard', feat2:'Weekly Wager Bonus', feat3:'Exclusive Community Access',
+      signupNow:'Sign Up Now',
+      lbCard:'Leaderboard',
+      lbDesc:'Compete on the monthly leaderboard and earn rewards based on your wager.',
+      days:'Days', hours:'Hrs', minutes:'Min', seconds:'Sec',
+      goToLb:'Go to Leaderboard',
+      weeklyCard:'Weekly Bonus',
+      weeklyDesc:'Earn bonuses based on your weekly wager amount.',
+      weeklyReset:'Resets in',
+      socialsTitle:'Follow Us',
+      footerWarning:'Please gamble responsibly. Underage gambling is prohibited by law.',
+      statsTitle:'\ud83d\udcca Stats Check', checkStats:'Check Stats',
+      weeklyTitle:'Weekly Wager Bonus',
+      wb1k:'$1,000 Wagered', wb5k:'$5,000 Wagered', wb50k:'$50,000+ Wagered',
+      weeklyEnds:'Weekly reset in',
+      winners10:'$10 Winners', winners50:'$50 Winners', winners400:'$400 Winners',
+      noWinners:'No winners yet'
+    }
+  };
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if (T[lang] && T[lang][key]) {
+        if (el.tagName === 'TITLE' || el.tagName === 'META') {
+          el.content ? el.content = T[lang][key] : el.textContent = T[lang][key];
+        } else {
+          el.textContent = T[lang][key];
+        }
+      }
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+    var input = document.getElementById('usernameInput');
+    if (input) {
+      input.placeholder = lang === 'en' ? input.getAttribute('data-placeholder-en') : input.getAttribute('data-placeholder-ja');
+    }
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = btn.getAttribute('data-lang');
+      localStorage.setItem('azisai-lang', lang);
+      applyLang(lang);
+    });
+  });
+  var savedLang = localStorage.getItem('azisai-lang');
+  if (savedLang && savedLang !== 'ja') applyLang(savedLang);
+
+  var baseStartUTC = new Date("2025-03-24T15:00:00.000Z");
+  function formatJSTDate(d) {
+    var jst = new Date(d.getTime() + 9*60*60*1000);
+    return (jst.getUTCMonth()+1)+'/'+jst.getUTCDate();
+  }
+  function updateWeeklyCountdown() {
+    var now = new Date();
+    var weekMs = 7 * 24 * 60 * 60 * 1000;
+    var timePassed = now - baseStartUTC;
+    var weeksPassed = Math.floor(timePassed / weekMs);
+    var currentStart = new Date(baseStartUTC.getTime() + weeksPassed * weekMs);
+    var nextReset = new Date(baseStartUTC.getTime() + (weeksPassed + 1) * weekMs);
+    var diff = Math.max(0, nextReset - now);
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff / 3600000) % 24);
+    var m = Math.floor((diff / 60000) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+    var text = d + 'd ' + h + 'h ' + m + 'm ' + s + 's';
+    var el1 = document.getElementById('home-weekly-cd');
+    var el2 = document.getElementById('modal-weekly-cd');
+    if (el1) el1.textContent = text;
+    if (el2) el2.textContent = text;
+    var datesEl = document.getElementById('home-weekly-dates');
+    var lastDay = new Date(nextReset.getTime() - 24*60*60*1000);
+    if (datesEl) datesEl.textContent = formatJSTDate(currentStart) + ' → ' + formatJSTDate(lastDay) + ' JST';
+  }
+  setInterval(updateWeeklyCountdown, 1000);
+  updateWeeklyCountdown();
+
+  async function loadWeeklyWinners() {
+    try {
+      var results = await Promise.all([
+        fetch('/api/weekly/1000').then(function(r){return r.json()}),
+        fetch('/api/weekly/5000').then(function(r){return r.json()}),
+        fetch('/api/weekly/50000').then(function(r){return r.json()})
+      ]);
+      var ids = ['names-1000','names-5000','names-50000'];
+      results.forEach(function(list,i) {
+        var ul = document.getElementById(ids[i]);
+        if (!ul) return;
+        if (!list.length) {
+          ul.innerHTML = '<li class="winners-list--empty">' + T[currentLang].noWinners + '</li>';
+          return;
+        }
+        ul.innerHTML = '';
+        list.forEach(function(obj) {
+          var li = document.createElement('li');
+          li.textContent = obj.name || obj.username || String(obj);
+          ul.appendChild(li);
+        });
+      });
+    } catch(err) { console.error('Weekly winners error:', err); }
+  }
+  loadWeeklyWinners();
+
+  var weeklyBonusBtn = document.getElementById('weeklyBonusBtn');
+  var weeklyModal = document.getElementById('weeklyModal');
+  if (weeklyBonusBtn && weeklyModal) {
+    weeklyBonusBtn.addEventListener('click', function() {
+      weeklyModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target.hasAttribute('data-close') || e.target.closest('[data-close]')) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(function(m) {
+        m.classList.remove('active'); document.body.style.overflow = '';
+      });
+    }
+  });
+
+  var widget = document.getElementById('stats-widget');
+  var dragHandle = document.getElementById('stats-drag');
+  var closeBtn = document.getElementById('stats-close');
+  var minimized = document.getElementById('stats-minimized');
+
+  if (closeBtn && widget && minimized) {
+    closeBtn.addEventListener('click', function() {
+      widget.style.display = 'none';
+      minimized.style.display = 'flex';
+    });
+  }
+  if (minimized && widget) {
+    minimized.addEventListener('click', function() {
+      widget.style.display = 'block';
+      minimized.style.display = 'none';
+    });
+  }
+
+  if (dragHandle && widget) {
+    dragHandle.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      var startX = e.clientX - widget.offsetLeft;
+      var startY = e.clientY - widget.offsetTop;
+      function onMove(ev) {
+        widget.style.left = ev.clientX - startX + 'px';
+        widget.style.top = ev.clientY - startY + 'px';
+        widget.style.right = 'auto';
+        widget.style.bottom = 'auto';
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', function() {
+        document.removeEventListener('mousemove', onMove);
+      }, { once: true });
+    });
+    dragHandle.addEventListener('touchstart', function(e) {
+      var touch = e.touches[0];
+      var startX = touch.clientX - widget.offsetLeft;
+      var startY = touch.clientY - widget.offsetTop;
+      function onMove(ev) {
+        ev.preventDefault();
+        var t = ev.touches[0];
+        widget.style.left = t.clientX - startX + 'px';
+        widget.style.top = t.clientY - startY + 'px';
+        widget.style.right = 'auto';
+        widget.style.bottom = 'auto';
+      }
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('touchend', function() {
+        document.removeEventListener('touchmove', onMove);
+      }, { once: true });
+    });
+  }
+
+  (function spawnParticles() {
+    var container = document.getElementById('particles');
+    if (!container) return;
+    var types = ['dot','dot','glow','spark','star','star'];
+    for (var i = 0; i < 45; i++) {
+      var p = document.createElement('div');
+      var type = types[Math.floor(Math.random() * types.length)];
+      p.className = 'particle ' + type;
+      p.style.left = Math.random() * 100 + '%';
+      if (type === 'star') {
+        p.style.top = Math.random() * 100 + '%';
+        p.style.animationDuration = (3 + Math.random() * 6) + 's';
+        p.style.animationDelay = (-Math.random() * 8) + 's';
+      } else {
+        p.style.animationDuration = (10 + Math.random() * 12) + 's';
+        p.style.animationDelay = (-Math.random() * 20) + 's';
+      }
+      container.appendChild(p);
+    }
+    for (var j = 0; j < 3; j++) {
+      var s = document.createElement('div');
+      s.className = 'particle aurora';
+      s.style.top = (20 + Math.random() * 60) + '%';
+      s.style.animationDuration = (6 + Math.random() * 6) + 's';
+      s.style.animationDelay = (-Math.random() * 10) + 's';
+      container.appendChild(s);
+    }
+  })();
+})();
+
+async function fetchUserStats() {
+  var username = document.getElementById('usernameInput').value.trim();
+  var resultBox = document.getElementById('resultBox');
+  var lang = document.documentElement.lang || 'ja';
+
+  if (!username) {
+    resultBox.innerHTML = '<span style="color:#f87171;">' + (lang === 'en' ? 'Please enter a username.' : 'ユーザー名を入力してください。') + '</span>';
+    return;
+  }
+  resultBox.innerHTML = '<span style="color:var(--az-primary);">' + (lang === 'en' ? 'Fetching...' : '取得中...') + '</span>';
+
+  try {
+    var res = await fetch('/api/user/stats?username=' + encodeURIComponent(username));
+    if (!res.ok) {
+      if (res.status === 404) {
+        resultBox.innerHTML = '<span style="color:#f87171;">' + (lang === 'en' ? 'Username not found.' : 'ユーザー名が見つかりません。') + '</span>';
+      } else {
+        resultBox.innerHTML = '<span style="color:#f87171;">' + (lang === 'en' ? 'Error fetching data.' : 'データの取得エラー。') + '</span>';
+      }
+      return;
+    }
+    var d = await res.json();
+    var fmt = function(n) { return '$' + Number(n).toLocaleString(); };
+    var html = '';
+    if (d.monthlyRank) {
+      html += '<span>' + (lang === 'en' ? 'Rank' : '順位') + ': <strong style="color:var(--az-gold);">#' + d.monthlyRank + '</strong></span>';
+    }
+    html += '<span>' + (lang === 'en' ? 'Monthly Wager' : '月間賭け金') + ': <strong style="color:var(--az-accent);">' + fmt(d.monthlyWager) + '</strong></span>';
+    html += '<span>' + (lang === 'en' ? 'Monthly Prize' : '月間報酬') + ': <strong style="color:' + (d.monthlyPrize > 0 ? 'var(--az-primary)' : 'var(--az-text-dim)') + ';">' + fmt(d.monthlyPrize) + '</strong></span>';
+    html += '<span style="border-top:1px solid rgba(255,255,255,0.08);padding-top:6px;margin-top:2px;">' + (lang === 'en' ? 'Weekly Wager' : '週間賭け金') + ': <strong style="color:var(--az-accent);">' + fmt(d.weeklyWager) + '</strong></span>';
+    html += '<span>' + (lang === 'en' ? 'Weekly Prize' : '週間報酬') + ': <strong style="color:' + (d.weeklyPrize > 0 ? '#10b981' : 'var(--az-text-dim)') + ';">' + fmt(d.weeklyPrize) + '</strong></span>';
+    resultBox.innerHTML = html;
+  } catch(err) {
+    resultBox.innerHTML = '<span style="color:#f87171;">' + (lang === 'en' ? 'Error fetching data.' : 'データの取得エラー。') + '</span>';
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>

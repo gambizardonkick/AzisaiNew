@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>AZISAI | Roobet Leaderboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AZISAI Roobet Leaderboard - Earn up to $10,000 based on your wager!">
+  <link rel="icon" type="image/jpg" href="/assets/logo.png">
+  <link rel="stylesheet" href="/css/leaderboard.css">
+</head>
+<body>
+
+<div class="bg-animation">
+  <div class="bg-orb blue"></div>
+  <div class="bg-orb purple"></div>
+  <div class="bg-orb cyan"></div>
+  <div class="bg-orb deep"></div>
+</div>
+<div class="hex-grid"></div>
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <header>
+    <a href="/" class="logo-section">
+      <img src="/assets/logo.png" alt="AZISAI">
+      <h1>AZISAI</h1>
+    </a>
+    <nav class="nav-links">
+      <a href="/" data-i18n="navHome">ホーム</a>
+      <a href="/leaderboard/roobet" class="active" data-i18n="navLb">リーダーボード</a>
+      <a href="/notes" data-i18n="navNotes">ノート</a>
+    </nav>
+    <div class="header-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="ja">日本語</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <img src="/assets/roobet.png" alt="Roobet" class="platform-logo" style="width:320px;max-width:80vw;height:auto;border-radius:0;">
+    <h1 class="hero-title">
+      ROOBET <span class="gold" data-i18n="heroTitle">リーダーボード</span>
+    </h1>
+    <p class="hero-subtitle" data-i18n="heroSubtitle">賭け金に応じて最大$10,000まで獲得可能。リーダーボードは15分ごとに更新されます。</p>
+
+    <div class="prize-pool-badge">
+      <span style="color:var(--az-text-dim);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Space Grotesk',sans-serif" data-i18n="prizePool">賞金プール</span>
+      <span class="amount">$10,000</span>
+    </div>
+
+    <div class="hero-buttons">
+      <button class="btn btn-dark" id="rulesBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span data-i18n="rulesBtn">ルール</span>
+      </button>
+      <button class="btn btn-primary" id="rewardsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span data-i18n="rewardsBtn">報酬を見る</span>
+      </button>
+      <button class="btn btn-dark" id="weeklyBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-i18n="weeklyBtn">週間ボーナス</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="countdown" id="countdown">
+    <div class="countdown-item">
+      <span class="num" id="cd-days">--</span>
+      <span class="label" data-i18n="days">日</span>
+    </div>
+    <div class="countdown-item">
+      <span class="num" id="cd-hours">--</span>
+      <span class="label" data-i18n="hours">時間</span>
+    </div>
+    <div class="countdown-item">
+      <span class="num" id="cd-mins">--</span>
+      <span class="label" data-i18n="minutes">分</span>
+    </div>
+    <div class="countdown-item">
+      <span class="num" id="cd-secs">--</span>
+      <span class="label" data-i18n="seconds">秒</span>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:center;margin-bottom:24px;">
+    <div class="toggle-group">
+      <button class="lb-toggle active" id="btn-current" data-i18n="currentBtn">現在</button>
+      <button class="lb-toggle" id="btn-previous" data-i18n="previousBtn">前回</button>
+    </div>
+  </div>
+
+  <div id="lb-loading" class="loading-wrap">
+    <div class="spinner"></div>
+    <span data-i18n="loading">読み込み中...</span>
+  </div>
+
+  <div id="lb-content" style="display:none;">
+    <div class="podium" id="podium"></div>
+    <div class="leaderboard-section">
+      <div class="leaderboard-table">
+        <div class="table-header">
+          <div data-i18n="colRank">順位</div>
+          <div data-i18n="colPlayer">プレイヤー</div>
+          <div style="text-align:right" data-i18n="colWager" class="table-wagered-col">賭け額</div>
+          <div style="text-align:right" data-i18n="colReward">報酬</div>
+        </div>
+        <div id="lb-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="socials-section">
+    <div class="socials-title" data-i18n="socialsTitle">フォローしてください</div>
+    <div class="social-media-cards">
+      <a href="https://roobet.com/?ref=azisai07219" target="_blank" class="card discord">
+        <img src="/image-removebg-preview (90).png" alt="Roobet Logo" class="icon">
+        <span>Roobet</span>
+      </a>
+      <a href="https://kick.com/azisaikick" target="_blank" class="card kick">
+        <img src="/assets/kick.png" alt="Kick Logo" class="icon">
+        <span>@Azisaikick</span>
+      </a>
+      <a href="https://youtube.com/@azisaikickakaibu" target="_blank" class="card kick">
+        <img src="/image-removebg-preview (86).png" alt="Kick Logo" class="icon">
+        <span>@Azisaikickakaibu</span>
+      </a>
+      <a href="https://x.com/marusai205" target="_blank" class="card discord">
+        <img src="/assets/x.png" alt="X Logo" class="icon">
+        <span>@marusai205</span>
+      </a>
+      <a href="https://youtube.com/@azisai-onkazi-kirinuki" target="_blank" class="card youtube">
+        <img src="/assets/youtube.png" alt="YouTube Logo" class="icon">
+        <span>@azisai-onkazi-kirinuki</span>
+      </a>
+      <a href="https://discord.gg/azisai" target="_blank" class="card discord">
+        <img src="/assets/discord.png" alt="Discord Logo" class="icon">
+        <span>@azisai</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-warning" data-i18n="footerWarning">ギャンブルは自己責任で楽しんでください。未成年者のギャンブルは法律で禁止されています。</div>
+    <div>AZISAI &copy; 2026</div>
+  </footer>
+</div>
+
+<div class="modal-overlay" id="rulesModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" data-i18n="rulesTitle">リーダーボードのルール</span>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:12px;" data-i18n="rulesIntro">このリーダーボードではRTPによってカウント率が変化します:</p>
+      <ul class="rules-list">
+        <li>
+          <span class="rule-icon" style="background:rgba(16,185,129,0.15);color:#34d399;">1</span>
+          <span data-i18n="rule1">RTP 97%以下のゲームは賭け額の100%が適応</span>
+        </li>
+        <li>
+          <span class="rule-icon" style="background:rgba(245,158,11,0.15);color:#fbbf24;">2</span>
+          <span data-i18n="rule2">RTP 97～98%のゲームは賭け額の50%が適応</span>
+        </li>
+        <li>
+          <span class="rule-icon" style="background:rgba(239,68,68,0.15);color:#f87171;">3</span>
+          <span data-i18n="rule3">RTP 98%以上のゲームは賭け額の10%が適応</span>
+        </li>
+      </ul>
+      <div class="rules-note" data-i18n="rulesNote">※ Diceは適応外です。ベット不正行為があった場合はリーダーボードから除外されます。</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="rewardsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" data-i18n="rewardsTitle">賭け報酬</span>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="w2m">$2,000,000+</span><span class="reward-tier__value">$10,000</span></div>
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="w1m">$1,000,000+</span><span class="reward-tier__value">$4,000</span></div>
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="w500k">$500,000+</span><span class="reward-tier__value">$1,500</span></div>
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="w300k">$300,000+</span><span class="reward-tier__value">$1,000</span></div>
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="w100k">$100,000+</span><span class="reward-tier__value">$500</span></div>
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="w50k">$50,000+</span><span class="reward-tier__value">$200</span></div>
+      <div class="reward-tier"><span class="reward-tier__wager" data-i18n="wLess">$50,000未満</span><span class="reward-tier__value reward-tier__value--zero">$0</span></div>
+      <p style="margin-top:16px;text-align:center;color:var(--az-text-dim);font-size:13px;" data-i18n="rewardsNote">報酬は合計加重ベット額に基づいています。</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="weeklyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" data-i18n="weeklyTitle">週間賭け金ボーナス</span>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="weekly-tier"><span class="weekly-tier__wager" data-i18n="wb1k">$1,000 ベット</span><span class="weekly-tier__reward">$10</span></div>
+      <div class="weekly-tier"><span class="weekly-tier__wager" data-i18n="wb5k">$5,000 ベット</span><span class="weekly-tier__reward">$50</span></div>
+      <div class="weekly-tier"><span class="weekly-tier__wager" data-i18n="wb50k">$50,000+ ベット</span><span class="weekly-tier__reward">$400</span></div>
+      <div style="text-align:center;margin:16px 0;padding:12px;border-radius:10px;background:var(--az-surface);">
+        <div id="weekly-dates" style="font-size:12px;color:var(--az-accent);margin-bottom:6px;font-family:'Space Grotesk',sans-serif;"></div>
+        <div style="font-size:12px;color:var(--az-text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;" data-i18n="weeklyEnds">週間リセットまで</div>
+        <div id="weekly-countdown" style="font-size:20px;font-weight:700;color:#fff;"></div>
+      </div>
+      <div class="winners-section">
+        <h4 data-i18n="winners10">$10 当選者</h4>
+        <ul class="winners-list" id="names-1000"><li class="winners-list--empty" data-i18n="noWinners">該当者なし</li></ul>
+        <h4 data-i18n="winners50">$50 当選者</h4>
+        <ul class="winners-list" id="names-5000"><li class="winners-list--empty" data-i18n="noWinners">該当者なし</li></ul>
+        <h4 data-i18n="winners400">$400 当選者</h4>
+        <ul class="winners-list" id="names-50000"><li class="winners-list--empty" data-i18n="noWinners">該当者なし</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var AVATAR = '/assets/roobetlogo.png';
+  var currentLang = 'ja';
+
+  var T = {
+    ja: {
+      navHome:'ホーム', navLb:'リーダーボード', navNotes:'ノート', liveBadge:'LIVE', currentBtn:'現在', previousBtn:'前回',
+      heroTitle:'リーダーボード',
+      heroSubtitle:'賭け金に応じて最大$10,000まで獲得可能。リーダーボードは15分ごとに更新されます。',
+      prizePool:'賞金プール',
+      rulesBtn:'ルール', rewardsBtn:'報酬を見る', weeklyBtn:'週間ボーナス',
+      days:'日', hours:'時間', minutes:'分', seconds:'秒',
+      loading:'読み込み中...',
+      colRank:'順位', colPlayer:'プレイヤー', colWager:'賭け額', colReward:'報酬',
+      wageredLabel:'賭け額',
+      rulesTitle:'リーダーボードのルール',
+      rulesIntro:'このリーダーボードではRTPによってカウント率が変化します:',
+      rule1:'RTP 97%以下のゲームは賭け額の100%が適応',
+      rule2:'RTP 97～98%のゲームは賭け額の50%が適応',
+      rule3:'RTP 98%以上のゲームは賭け額の10%が適応',
+      rulesNote:'※ Diceは適応外です。ベット不正行為があった場合はリーダーボードから除外されます。',
+      rewardsTitle:'賭け報酬',
+      w2m:'$2,000,000以上', w1m:'$1,000,000以上', w500k:'$500,000以上',
+      w300k:'$300,000以上', w100k:'$100,000以上', w50k:'$50,000以上', wLess:'$50,000未満',
+      rewardsNote:'報酬は合計加重ベット額に基づいています。',
+      weeklyTitle:'週間賭け金ボーナス',
+      wb1k:'$1,000 ベット', wb5k:'$5,000 ベット', wb50k:'$50,000+ ベット',
+      weeklyEnds:'週間リセットまで',
+      winners10:'$10 当選者', winners50:'$50 当選者', winners400:'$400 当選者',
+      noWinners:'該当者なし',
+      socialsTitle:'フォローしてください',
+      footerWarning:'ギャンブルは自己責任で楽しんでください。未成年者のギャンブルは法律で禁止されています。',
+      empty:'データがまだありません'
+    },
+    en: {
+      navHome:'Home', navLb:'Leaderboard', navNotes:'Notes', liveBadge:'LIVE', currentBtn:'Current', previousBtn:'Previous',
+      heroTitle:'Leaderboard',
+      heroSubtitle:'Earn up to $10,000 based on your wager. The leaderboard updates every 15 minutes.',
+      prizePool:'Prize Pool',
+      rulesBtn:'Rules', rewardsBtn:'Rewards', weeklyBtn:'Weekly Bonus',
+      days:'Days', hours:'Hrs', minutes:'Min', seconds:'Sec',
+      loading:'Loading...',
+      colRank:'Rank', colPlayer:'Player', colWager:'Wagered', colReward:'Reward',
+      wageredLabel:'Wagered',
+      rulesTitle:'Leaderboard Rules',
+      rulesIntro:'Wager count rates vary by game RTP:',
+      rule1:'Games with RTP \u226497% \u2014 100% of wager counts',
+      rule2:'Games with RTP 97\u201398% \u2014 50% of wager counts',
+      rule3:'Games with RTP \u226598% \u2014 10% of wager counts',
+      rulesNote:'Dice is excluded. Wager abuse will result in removal from the leaderboard.',
+      rewardsTitle:'Wager Rewards',
+      w2m:'$2,000,000+', w1m:'$1,000,000+', w500k:'$500,000+',
+      w300k:'$300,000+', w100k:'$100,000+', w50k:'$50,000+', wLess:'Under $50,000',
+      rewardsNote:'Rewards are based on total weighted wager amount.',
+      weeklyTitle:'Weekly Wager Bonus',
+      wb1k:'$1,000 Wagered', wb5k:'$5,000 Wagered', wb50k:'$50,000+ Wagered',
+      weeklyEnds:'Weekly reset in',
+      winners10:'$10 Winners', winners50:'$50 Winners', winners400:'$400 Winners',
+      noWinners:'No winners yet',
+      socialsTitle:'Follow Us',
+      footerWarning:'Please gamble responsibly. Underage gambling is prohibited by law.',
+      empty:'No data yet'
+    }
+  };
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if (T[lang] && T[lang][key]) {
+        if (el.tagName === 'TITLE' || el.tagName === 'META') {
+          el.content ? el.content = T[lang][key] : el.textContent = T[lang][key];
+        } else {
+          el.textContent = T[lang][key];
+        }
+      }
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = btn.getAttribute('data-lang');
+      localStorage.setItem('azisai-lang', lang);
+      applyLang(lang);
+    });
+  });
+  var savedLang = localStorage.getItem('azisai-lang');
+  if (savedLang && savedLang !== 'ja') applyLang(savedLang);
+
+  function getReward(w) {
+    if (w >= 2000000) return 10000;
+    if (w >= 1000000) return 4000;
+    if (w >= 500000) return 1500;
+    if (w >= 300000) return 1000;
+    if (w >= 100000) return 500;
+    if (w >= 50000) return 200;
+    return 0;
+  }
+
+  function fmt(n) {
+    return '$' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function updateCountdown() {
+    var now = new Date();
+    var nowUTC = now.getTime();
+    var year = now.getUTCFullYear();
+    var month = now.getUTCMonth();
+    var targetUTC;
+    if (year === 2025 && month === 5) {
+      targetUTC = Date.UTC(2025, 6, 31, 15, 0, 0);
+    } else {
+      targetUTC = Date.UTC(year, month + 1, 0, 15, 0, 0);
+      if (nowUTC >= targetUTC) targetUTC = Date.UTC(year, month + 2, 0, 15, 0, 0);
+    }
+    var diff = Math.max(0, targetUTC - nowUTC);
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff / 3600000) % 24);
+    var m = Math.floor((diff / 60000) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+    document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  var WEEKLY_BASE = new Date("2025-03-24T15:00:00.000Z");
+  function getWeeklyDates() {
+    var now = new Date();
+    var weekMs = 7 * 24 * 60 * 60 * 1000;
+    var timePassed = now - WEEKLY_BASE;
+    var weeksPassed = Math.floor(timePassed / weekMs);
+    var currentStart = new Date(WEEKLY_BASE.getTime() + weeksPassed * weekMs);
+    var currentEnd = new Date(currentStart.getTime() + weekMs);
+    return { start: currentStart, end: currentEnd };
+  }
+  function formatJSTDate(d) {
+    var jst = new Date(d.getTime() + 9*60*60*1000);
+    return (jst.getUTCMonth()+1)+'/'+jst.getUTCDate();
+  }
+  function updateWeeklyCountdown() {
+    var el = document.getElementById('weekly-countdown');
+    if (!el) return;
+    var dates = getWeeklyDates();
+    var now = new Date();
+    var diff = Math.max(0, dates.end - now);
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff / 3600000) % 24);
+    var m = Math.floor((diff / 60000) % 60);
+    var s = Math.floor((diff / 1000) % 60);
+    el.textContent = d + 'd ' + h + 'h ' + m + 'm ' + s + 's';
+    var datesEl = document.getElementById('weekly-dates');
+    if (datesEl) {
+      var lastDay = new Date(dates.end.getTime() - 24*60*60*1000);
+      datesEl.textContent = formatJSTDate(dates.start) + ' → ' + formatJSTDate(lastDay) + ' JST';
+    }
+  }
+  setInterval(updateWeeklyCountdown, 1000);
+  updateWeeklyCountdown();
+
+  var podiumOrder = [
+    { idx: 0, cls: 'silver', rank: 2, crown: '' },
+    { idx: 1, cls: 'gold',   rank: 1, crown: '\ud83d\udc51' },
+    { idx: 2, cls: 'bronze', rank: 3, crown: '' }
+  ];
+
+  var currentPeriod = 'current';
+
+  document.getElementById('btn-current').addEventListener('click', function() {
+    currentPeriod = 'current';
+    this.classList.add('active');
+    document.getElementById('btn-previous').classList.remove('active');
+    loadLeaderboard();
+  });
+  document.getElementById('btn-previous').addEventListener('click', function() {
+    currentPeriod = 'previous';
+    this.classList.add('active');
+    document.getElementById('btn-current').classList.remove('active');
+    loadLeaderboard();
+  });
+
+  async function loadLeaderboard() {
+    try {
+      var url = currentPeriod === 'current' ? '/api/monthly/top14' : '/api/monthly/previous/top14';
+      var res = await fetch(url);
+      var data = await res.json();
+      if (!data || !data.length) {
+        document.getElementById('lb-loading').style.display = 'none';
+        document.getElementById('lb-content').style.display = 'block';
+        document.getElementById('podium').innerHTML = '<p class="no-entries">' + T[currentLang].empty + '</p>';
+        return;
+      }
+      var podium = document.getElementById('podium');
+      podium.innerHTML = '';
+      podiumOrder.forEach(function(p) {
+        if (!data[p.idx]) return;
+        var entry = data[p.idx];
+        var reward = getReward(entry.weightedWager);
+        var card = document.createElement('div');
+        card.className = 'podium-card ' + p.cls;
+        card.innerHTML =
+          (p.crown ? '<span class="podium-crown">' + p.crown + '</span>' : '') +
+          '<span class="podium-rank">#' + p.rank + '</span>' +
+          '<div class="podium-avatar"><img src="' + AVATAR + '" alt=""></div>' +
+          '<div class="podium-name">' + entry.username + '</div>' +
+          '<div class="podium-wager" data-i18n="wageredLabel">' + T[currentLang].wageredLabel + '</div>' +
+          '<div class="podium-amount">' + fmt(entry.weightedWager) + '</div>' +
+          '<span class="podium-prize">' + (reward > 0 ? fmt(reward) : '$0') + '</span>';
+        podium.appendChild(card);
+      });
+      var rowsEl = document.getElementById('lb-rows');
+      rowsEl.innerHTML = '';
+      for (var i = 3; i < data.length; i++) {
+        var entry = data[i];
+        var reward = getReward(entry.weightedWager);
+        var place = i + 1;
+        var row = document.createElement('div');
+        row.className = 'table-row';
+        row.innerHTML =
+          '<div class="table-rank">#' + place + '</div>' +
+          '<div class="table-name"><img src="' + AVATAR + '" alt=""><span>' + entry.username + '</span></div>' +
+          '<div class="table-wagered table-wagered-col">' + fmt(entry.weightedWager) + '</div>' +
+          '<div class="table-prize ' + (reward > 0 ? 'has-reward' : 'no-reward') + '">' + (reward > 0 ? fmt(reward) : '$0') + '</div>';
+        rowsEl.appendChild(row);
+      }
+      document.getElementById('lb-loading').style.display = 'none';
+      document.getElementById('lb-content').style.display = 'block';
+    } catch(err) {
+      console.error('Leaderboard load error:', err);
+      document.getElementById('lb-loading').innerHTML = '<span style="color:#f87171;">Failed to load leaderboard data</span>';
+    }
+  }
+  loadLeaderboard();
+
+  async function loadWeeklyWinners() {
+    try {
+      var results = await Promise.all([
+        fetch('/api/weekly/1000').then(function(r){return r.json()}),
+        fetch('/api/weekly/5000').then(function(r){return r.json()}),
+        fetch('/api/weekly/50000').then(function(r){return r.json()})
+      ]);
+      var ids = ['names-1000', 'names-5000', 'names-50000'];
+      results.forEach(function(list, i) {
+        var ul = document.getElementById(ids[i]);
+        if (!ul) return;
+        if (!list.length) {
+          ul.innerHTML = '<li class="winners-list--empty">' + T[currentLang].noWinners + '</li>';
+          return;
+        }
+        ul.innerHTML = '';
+        list.forEach(function(obj) {
+          var li = document.createElement('li');
+          li.textContent = obj.name || obj.username || String(obj);
+          ul.appendChild(li);
+        });
+      });
+    } catch(err) { console.error('Weekly winners error:', err); }
+  }
+  loadWeeklyWinners();
+
+  document.querySelectorAll('[id$="Btn"]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var map = { rulesBtn:'rulesModal', rewardsBtn:'rewardsModal', weeklyBtn:'weeklyModal' };
+      var modal = document.getElementById(map[btn.id]);
+      if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    });
+  });
+
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target.hasAttribute('data-close') || e.target.closest('[data-close]')) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(function(m) {
+        m.classList.remove('active'); document.body.style.overflow = '';
+      });
+    }
+  });
+
+  (function spawnParticles() {
+    var container = document.getElementById('particles');
+    if (!container) return;
+    var types = ['dot','dot','glow','spark','star','star'];
+    for (var i = 0; i < 45; i++) {
+      var p = document.createElement('div');
+      var type = types[Math.floor(Math.random() * types.length)];
+      p.className = 'particle ' + type;
+      p.style.left = Math.random() * 100 + '%';
+      if (type === 'star') {
+        p.style.top = Math.random() * 100 + '%';
+        p.style.animationDuration = (3 + Math.random() * 6) + 's';
+        p.style.animationDelay = (-Math.random() * 8) + 's';
+      } else {
+        p.style.animationDuration = (10 + Math.random() * 12) + 's';
+        p.style.animationDelay = (-Math.random() * 20) + 's';
+      }
+      container.appendChild(p);
+    }
+    for (var j = 0; j < 3; j++) {
+      var s = document.createElement('div');
+      s.className = 'particle aurora';
+      s.style.top = (20 + Math.random() * 60) + '%';
+      s.style.animationDuration = (6 + Math.random() * 6) + 's';
+      s.style.animationDelay = (-Math.random() * 10) + 's';
+      container.appendChild(s);
+    }
+  })();
+})();
+</script>
+</body>
+</html>

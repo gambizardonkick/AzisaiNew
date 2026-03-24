@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AZISAI 管理パネル</title>
+<link rel="icon" type="image/jpg" href="/assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e1a;--surface:#111827;--surface2:#1a2236;--border:#1e293b;
+  --primary:#4f7df7;--accent:#00d4ff;--gold:#ffd700;
+  --text:#e2e8f0;--dim:#64748b;--green:#10b981;--red:#f87171;
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.admin-header{
+  padding:20px 32px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;background:var(--surface);
+}
+.admin-header h1{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.admin-header h1 span{color:var(--primary)}
+.admin-header .badge{
+  font-size:11px;padding:4px 10px;border-radius:20px;
+  background:rgba(79,125,247,0.15);color:var(--primary);
+  font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+}
+.admin-body{max-width:1200px;margin:0 auto;padding:24px}
+.section{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  margin-bottom:24px;overflow:hidden;
+}
+.section-header{
+  padding:18px 24px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.section-header h2{font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.section-header h2 .icon{
+  width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.section-body{padding:24px}
+.toggle-group{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px}
+.toggle-btn{
+  padding:8px 18px;border:none;border-radius:8px;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
+  background:transparent;color:var(--dim);transition:all .2s;
+}
+.toggle-btn.active{background:var(--primary);color:#fff}
+.toggle-btn:hover:not(.active){color:var(--text)}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{
+  text-align:left;padding:10px 12px;color:var(--dim);font-weight:600;
+  font-family:'Space Grotesk',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:1px;
+  border-bottom:1px solid var(--border);
+}
+.data-table td{padding:10px 12px;border-bottom:1px solid rgba(30,41,59,0.5);font-family:'JetBrains Mono',monospace;font-size:12px}
+.data-table tr:hover td{background:rgba(79,125,247,0.04)}
+.data-table .rank{color:var(--primary);font-weight:600}
+.data-table .username{color:#fff;font-weight:500}
+.data-table .wager{color:var(--green);text-align:right}
+.data-table .reward{color:var(--gold);text-align:right;font-weight:600}
+.form-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:11px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:1px;font-family:'Space Grotesk',sans-serif}
+.form-group input,.form-group textarea{
+  padding:10px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;
+  outline:none;transition:border-color .2s;
+}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--primary)}
+.fetch-btn{
+  padding:10px 24px;border:none;border-radius:8px;cursor:pointer;
+  background:var(--primary);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;
+  transition:all .2s;
+}
+.fetch-btn:hover{background:#6b92ff}
+.fetch-btn:disabled{opacity:0.5;cursor:not-allowed}
+.results-info{
+  padding:10px 16px;border-radius:8px;background:rgba(79,125,247,0.08);
+  border:1px solid rgba(79,125,247,0.15);margin-bottom:16px;
+  font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace;
+}
+.results-info span{color:var(--accent);font-weight:600}
+.tier-section{margin-bottom:24px}
+.tier-header{
+  font-size:14px;font-weight:700;margin-bottom:12px;padding:10px 16px;
+  border-radius:8px;background:var(--surface2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.tier-header .tier-reward{color:var(--gold);font-family:'JetBrains Mono',monospace}
+.tier-header .tier-count{color:var(--dim);font-size:12px}
+.names-list{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;
+  padding:0 4px;
+}
+.names-list .name-item{
+  padding:8px 12px;border-radius:6px;background:var(--bg);
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:#fff;
+  border:1px solid rgba(30,41,59,0.5);
+}
+.names-list .name-item .name-wager{color:var(--green);font-size:11px;margin-left:8px}
+.empty-state{color:var(--dim);font-style:italic;padding:12px;font-size:13px}
+.date-range-info{
+  font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace;
+  padding:8px 0;
+}
+.date-range-info strong{color:var(--accent)}
+.scroll-wrap{max-height:500px;overflow-y:auto}
+.scroll-wrap::-webkit-scrollbar{width:6px}
+.scroll-wrap::-webkit-scrollbar-track{background:transparent}
+.scroll-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.note-form-box{
+  display:none;margin-bottom:24px;padding:20px;border-radius:12px;
+  background:var(--bg);border:1px solid var(--border);
+}
+.image-upload-area{
+  border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;
+  cursor:pointer;transition:border-color .2s;margin-bottom:12px;color:var(--dim);font-size:13px;
+}
+.image-upload-area:hover{border-color:var(--primary)}
+.image-preview-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.image-preview-item{
+  position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid var(--border);
+}
+.image-preview-item img{width:100%;height:100%;object-fit:cover}
+.image-preview-item .remove-img{
+  position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;
+  background:rgba(0,0,0,0.7);color:#fff;border:none;cursor:pointer;
+  font-size:12px;display:flex;align-items:center;justify-content:center;
+}
+.note-item{
+  padding:16px;border-radius:10px;background:var(--bg);border:1px solid var(--border);
+  margin-bottom:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+}
+.note-item__info{flex:1;min-width:0}
+.note-item__title{font-weight:700;font-size:14px;margin-bottom:4px;color:#fff}
+.note-item__meta{font-size:12px;color:var(--dim);margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.note-item__meta .tag{padding:2px 8px;border-radius:12px;font-size:10px;background:rgba(79,125,247,0.12);color:var(--primary)}
+.note-item__stats{font-size:11px;color:var(--dim);display:flex;gap:12px;margin-bottom:4px;font-family:'Space Grotesk',sans-serif}
+.note-item__stats span{display:flex;align-items:center;gap:3px}
+.note-item__preview{font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-item__images{display:flex;gap:4px;margin-top:6px}
+.note-item__images img{width:40px;height:40px;border-radius:4px;object-fit:cover;border:1px solid var(--border)}
+.note-item__actions{display:flex;gap:6px;flex-shrink:0}
+.btn-sm{
+  padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-family:Outfit,sans-serif;
+  border:1px solid var(--border);background:var(--surface);color:#fff;transition:all .2s;
+}
+.btn-sm:hover{background:var(--surface2)}
+.btn-sm.danger{border-color:rgba(248,113,113,0.3);background:rgba(248,113,113,0.1);color:var(--red)}
+.btn-sm.danger:hover{background:rgba(248,113,113,0.2)}
+@media(max-width:768px){
+  .form-row{flex-direction:column}
+  .names-list{grid-template-columns:1fr}
+  .admin-body{padding:12px}
+  .section-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .login-box{max-width:90vw;padding:28px 20px}
+  .note-item{flex-direction:column;align-items:flex-start;gap:8px}
+  .note-item__actions{width:100%;justify-content:flex-end}
+}
+.login-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
+  background:var(--bg);display:flex;align-items:center;justify-content:center;
+}
+.login-box{
+  width:100%;max-width:380px;padding:40px 32px;border-radius:16px;
+  background:var(--surface);border:1px solid var(--border);text-align:center;
+}
+.login-box h2{font-size:24px;font-weight:800;margin-bottom:6px;color:#fff}
+.login-box h2 span{color:var(--primary)}
+.login-box p{font-size:13px;color:var(--dim);margin-bottom:24px}
+.login-box input{
+  width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg);color:#fff;font-size:14px;font-family:Outfit,sans-serif;
+  margin-bottom:12px;outline:none;
+}
+.login-box input:focus{border-color:var(--primary)}
+.login-box .login-btn{
+  width:100%;padding:12px;border:none;border-radius:10px;font-size:14px;
+  font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;transition:all .2s;
+  background:var(--primary);color:#fff;
+}
+.login-box .login-btn:hover{opacity:.9}
+.login-box .login-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-error{color:var(--red);font-size:12px;margin-bottom:12px;min-height:16px}
+.login-info{color:var(--accent);font-size:12px;margin-bottom:12px}
+.logout-btn{
+  padding:6px 14px;font-size:12px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--border);background:transparent;color:var(--dim);
+  font-family:Outfit,sans-serif;transition:all .2s;
+}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="login-overlay" class="login-overlay">
+  <div class="login-box">
+    <h2><span>AZISAI</span> Admin</h2>
+    <p id="login-subtitle" data-i18n-login="subtitle">管理パネルにログイン</p>
+    <div id="login-error" class="login-error"></div>
+    <form id="login-step-password" onsubmit="event.preventDefault();submitPassword()">
+      <input type="password" id="login-password" data-placeholder-ja="パスワード" data-placeholder-en="Password" placeholder="パスワード" autocomplete="current-password">
+      <button type="submit" class="login-btn" id="login-pw-btn" data-i18n-login="loginBtn">ログイン</button>
+    </form>
+    <form id="login-step-code" style="display:none" onsubmit="event.preventDefault();submitCode()">
+      <div id="login-code-info" class="login-info" data-i18n-login="codeSent">Telegramに認証コードを送信しました</div>
+      <input type="text" id="login-code" data-placeholder-ja="6桁の認証コード" data-placeholder-en="6-digit code" placeholder="6桁の認証コード" maxlength="6" autocomplete="one-time-code" inputmode="numeric">
+      <button type="submit" class="login-btn" id="login-code-btn" data-i18n-login="verifyBtn">認証</button>
+    </form>
+  </div>
+</div>
+
+<div class="admin-header">
+  <h1><span>AZISAI</span> <span data-i18n="headerTitle">管理パネル</span></h1>
+  <span class="badge" data-i18n="headerBadge">内部用</span>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+    <div style="display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px">
+      <button class="toggle-btn lang-btn active" data-lang="ja" style="padding:6px 14px;font-size:12px">日本語</button>
+      <button class="toggle-btn lang-btn" data-lang="en" style="padding:6px 14px;font-size:12px">EN</button>
+    </div>
+    <button class="logout-btn" onclick="adminLogout()" data-i18n="logoutBtn">ログアウト</button>
+  </div>
+</div>
+
+<div class="admin-body">
+
+  <div class="section">
+    <div class="section-header">
+      <h2><div class="icon" style="background:rgba(79,125,247,0.15)">📊</div> <span data-i18n="sectionLb">月間リーダーボード</span></h2>
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-tab="lb-current" onclick="switchLbTab(this)" data-i18n="current">今月</button>
+        <button class="toggle-btn" data-tab="lb-previous" onclick="switchLbTab(this)" data-i18n="previous">先月</button>
+      </div>
+    </div>
+    <div class="section-body">
+      <div id="lb-date-range" class="date-range-info"></div>
+      <div class="scroll-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th data-i18n="thUsername">ユーザー名</th><th style="text-align:right" data-i18n="thWager">賭け額</th><th style="text-align:right" data-i18n="thReward">報酬</th></tr>
+          </thead>
+          <tbody id="lb-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2><div class="icon" style="background:rgba(16,185,129,0.15)">🔍</div> <span data-i18n="sectionStats">カスタム期間統計</span></h2>
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="startDate">開始日 (UTC)</label>
+          <input type="datetime-local" id="stats-start" step="1">
+        </div>
+        <div class="form-group">
+          <label data-i18n="endDate">終了日 (UTC)</label>
+          <input type="datetime-local" id="stats-end" step="1">
+        </div>
+        <button class="fetch-btn" id="stats-fetch-btn" onclick="fetchCustomStats()" data-i18n="fetchStats">統計を取得</button>
+      </div>
+      <div id="stats-results"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2><div class="icon" style="background:rgba(255,215,0,0.15)">💰</div> <span data-i18n="sectionWeekly">週間報酬（生データ）</span></h2>
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-tab="wk-current" onclick="switchWkTab(this)" data-i18n="currentWeek">今週</button>
+        <button class="toggle-btn" data-tab="wk-previous" onclick="switchWkTab(this)" data-i18n="previousWeek">先週</button>
+      </div>
+    </div>
+    <div class="section-body">
+      <div id="wk-date-range" class="date-range-info"></div>
+      <div id="wk-content"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2><div class="icon" style="background:rgba(139,111,255,0.15)">📝</div> <span data-i18n="sectionNotes">ノート / ストーリー</span></h2>
+      <button class="fetch-btn" onclick="showNewNoteForm()" data-i18n="newNote">+ 新規ノート</button>
+    </div>
+    <div class="section-body">
+      <div id="note-form" class="note-form-box">
+        <input type="hidden" id="note-edit-id">
+        <div class="form-group" style="margin-bottom:12px">
+          <label data-i18n="noteTitle">タイトル</label>
+          <input type="text" id="note-title" data-placeholder-ja="ノートのタイトル..." data-placeholder-en="Note title..." placeholder="ノートのタイトル..." style="width:100%">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label data-i18n="noteTags">タグ（カンマ区切り）</label>
+          <input type="text" id="note-tags" data-placeholder-ja="お知らせ, ニュース, ボーナス..." data-placeholder-en="announcement, news, bonus..." placeholder="お知らせ, ニュース, ボーナス..." style="width:100%">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label data-i18n="noteImages">画像</label>
+          <div class="image-upload-area" id="image-drop-area" onclick="document.getElementById('image-input').click()">
+            <span data-i18n="uploadHint">クリックまたはドラッグで画像をアップロード（最大5MB）</span>
+          </div>
+          <input type="file" id="image-input" accept="image/*" multiple style="display:none">
+          <div class="image-preview-list" id="image-previews"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:16px">
+          <label data-i18n="noteContent">本文（**太字** と *斜体* 対応）</label>
+          <textarea id="note-content" rows="8" data-placeholder-ja="ノートの内容を入力..." data-placeholder-en="Enter note content..." placeholder="ノートの内容を入力..." style="width:100%;line-height:1.6;resize:vertical;"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="fetch-btn" onclick="saveNote()" data-i18n="save">保存</button>
+          <button class="fetch-btn" style="background:var(--border)" onclick="cancelNote()" data-i18n="cancel">キャンセル</button>
+        </div>
+      </div>
+      <div id="notes-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var currentLbTab = 'lb-current';
+  var currentWkTab = 'wk-current';
+  var noteImages = [];
+  var currentLang = localStorage.getItem('azisai-lang') || 'ja';
+
+  var T = {
+    ja: {
+      headerTitle:'管理パネル', headerBadge:'内部用',
+      sectionLb:'月間リーダーボード', current:'今月', previous:'先月',
+      thUsername:'ユーザー名', thWager:'賭け額', thReward:'報酬',
+      sectionStats:'カスタム期間統計', startDate:'開始日 (UTC)', endDate:'終了日 (UTC)', fetchStats:'統計を取得',
+      sectionWeekly:'週間報酬（生データ）', currentWeek:'今週', previousWeek:'先週',
+      sectionNotes:'ノート / ストーリー', newNote:'+ 新規ノート',
+      noteTitle:'タイトル', noteTags:'タグ（カンマ区切り）', noteImages:'画像',
+      uploadHint:'クリックまたはドラッグで画像をアップロード（最大5MB）',
+      noteContent:'本文（**太字** と *斜体* 対応）',
+      save:'保存', cancel:'キャンセル',
+      period:'期間', players:'人', noQualifying:'対象プレイヤーなし',
+      fetchingStats:'取得中...', fillDates:'開始日と終了日を入力してください',
+      titleRequired:'タイトルと本文は必須です', saveError:'保存エラー',
+      deleteConfirm:'このノートを削除しますか？',
+      emptyNotes:'ノートはまだありません。「+ 新規ノート」をクリックして作成してください。',
+      loadError:'読み込みエラー', edit:'編集', delete:'削除',
+      logoutBtn:'ログアウト',
+    },
+    en: {
+      headerTitle:'Admin Panel', headerBadge:'Internal',
+      sectionLb:'Monthly Leaderboard', current:'Current', previous:'Previous',
+      thUsername:'Username', thWager:'Wagered', thReward:'Reward',
+      sectionStats:'Custom Date Range Stats', startDate:'Start Date (UTC)', endDate:'End Date (UTC)', fetchStats:'Fetch Stats',
+      sectionWeekly:'Weekly Rewards (Raw Names)', currentWeek:'Current Week', previousWeek:'Previous Week',
+      sectionNotes:'Notes / Stories', newNote:'+ New Note',
+      noteTitle:'Title', noteTags:'Tags (comma separated)', noteImages:'Images',
+      uploadHint:'Click or drag to upload images (max 5MB)',
+      noteContent:'Content (supports **bold** and *italic*)',
+      save:'Save', cancel:'Cancel',
+      period:'Period', players:' players', noQualifying:'No qualifying players',
+      fetchingStats:'Fetching...', fillDates:'Please fill in both start and end dates',
+      titleRequired:'Title and content required', saveError:'Save error',
+      deleteConfirm:'Delete this note?',
+      emptyNotes:'No notes yet. Click "+ New Note" to create one.',
+      loadError:'Load error', edit:'Edit', delete:'Delete',
+      logoutBtn:'Logout',
+    }
+  };
+
+  var loginT = {
+    ja: { subtitle:'管理パネルにログイン', loginBtn:'ログイン', verifyBtn:'認証',
+          codeSent:'Telegramに認証コードを送信しました', loggingIn:'認証中...',
+          verifying:'確認中...', tooMany:'試行回数制限に達しました', invalidPw:'パスワードが正しくありません',
+          invalidCode:'認証コードが正しくありません', codeExpired:'コードの有効期限が切れました',
+          sendFailed:'コードの送信に失敗しました', error:'エラーが発生しました' },
+    en: { subtitle:'Log in to admin panel', loginBtn:'Login', verifyBtn:'Verify',
+          codeSent:'Verification code sent to Telegram', loggingIn:'Logging in...',
+          verifying:'Verifying...', tooMany:'Too many attempts', invalidPw:'Invalid password',
+          invalidCode:'Invalid verification code', codeExpired:'Code expired',
+          sendFailed:'Failed to send code', error:'An error occurred' }
+  };
+
+  function t(key){ return (T[currentLang] && T[currentLang][key]) || key; }
+
+  function lt(key){ return (loginT[currentLang] && loginT[currentLang][key]) || key; }
+
+  function applyLang(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if(T[lang] && T[lang][key]) el.textContent = T[lang][key];
+    });
+    document.querySelectorAll('[data-i18n-login]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-login');
+      if(loginT[lang] && loginT[lang][key]) el.textContent = loginT[lang][key];
+    });
+    document.querySelectorAll('[data-placeholder-ja]').forEach(function(el){
+      el.placeholder = el.getAttribute('data-placeholder-'+lang) || el.placeholder;
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+    if(!document.getElementById('login-overlay').style.display || document.getElementById('login-overlay').style.display !== 'none'){
+    } else {
+      loadNotes();
+    }
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var lang = btn.getAttribute('data-lang');
+      localStorage.setItem('azisai-lang', lang);
+      applyLang(lang);
+    });
+  });
+
+  if(currentLang !== 'ja') applyLang(currentLang);
+
+  function fmt(n){ return '$' + Number(n).toLocaleString() }
+
+  function getReward(w){
+    if(w>=2000000)return 10000;if(w>=1000000)return 4000;if(w>=500000)return 1500;
+    if(w>=300000)return 1000;if(w>=100000)return 500;if(w>=50000)return 200;return 0;
+  }
+
+  function formatDateJST(iso){
+    var d = new Date(iso);
+    var jst = new Date(d.getTime() + 9*60*60*1000);
+    return jst.getUTCFullYear()+'/'+String(jst.getUTCMonth()+1).padStart(2,'0')+'/'+String(jst.getUTCDate()).padStart(2,'0')+' '+String(jst.getUTCHours()).padStart(2,'0')+':'+String(jst.getUTCMinutes()).padStart(2,'0')+' JST';
+  }
+
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+  window.switchLbTab = function(btn){
+    currentLbTab = btn.getAttribute('data-tab');
+    btn.parentElement.querySelectorAll('.toggle-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    loadLeaderboard();
+  };
+
+  window.switchWkTab = function(btn){
+    currentWkTab = btn.getAttribute('data-tab');
+    btn.parentElement.querySelectorAll('.toggle-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    loadWeekly();
+  };
+
+  async function loadLeaderboard(){
+    var isCurrent = currentLbTab === 'lb-current';
+    var url = isCurrent ? '/api/admin/monthly/current' : '/api/admin/monthly/previous';
+    var rangeUrl = isCurrent ? '/api/monthly/current-range' : '/api/monthly/previous-range';
+    try {
+      var [dataRes, rangeRes] = await Promise.all([authFetch(url), authFetch(rangeUrl)]);
+      var data = await dataRes.json();
+      var range = await rangeRes.json();
+      document.getElementById('lb-date-range').innerHTML =
+        t('period') + ': <strong>' + formatDateJST(range.startDate) + '</strong> → <strong>' + formatDateJST(range.endDate) + '</strong> (' + data.length + t('players') + ')';
+      var tbody = document.getElementById('lb-table-body');
+      tbody.innerHTML = '';
+      data.forEach(function(p){
+        var reward = getReward(p.weightedWager);
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="rank">' + p.rank + '</td>' +
+          '<td class="username">' + esc(p.username) + '</td>' +
+          '<td class="wager">' + fmt(p.weightedWager) + '</td>' +
+          '<td class="reward">' + (reward > 0 ? fmt(reward) : '-') + '</td>';
+        tbody.appendChild(tr);
+      });
+    } catch(e){ console.error(e); }
+  }
+
+  async function loadWeekly(){
+    var isCurrent = currentWkTab === 'wk-current';
+    var url = isCurrent ? '/api/admin/weekly/current' : '/api/admin/weekly/previous';
+    try {
+      var res = await authFetch(url);
+      var data = await res.json();
+      document.getElementById('wk-date-range').innerHTML =
+        t('period') + ': <strong>' + formatDateJST(data.dates.startDate) + '</strong> → <strong>' + formatDateJST(data.dates.endDate) + '</strong>';
+      var tiers = [
+        { key: 'tier1000', label: '$1,000 - $4,999', reward: '$10' },
+        { key: 'tier5000', label: '$5,000 - $49,999', reward: '$50' },
+        { key: 'tier50000', label: '$50,000+', reward: '$400' }
+      ];
+      var html = '';
+      tiers.forEach(function(tier){
+        var list = data.tiers[tier.key];
+        html += '<div class="tier-section">';
+        html += '<div class="tier-header"><span>' + tier.label + ' → <span class="tier-reward">' + tier.reward + '</span></span><span class="tier-count">' + list.length + (currentLang==='ja'?'人':' players') + '</span></div>';
+        if(list.length === 0){
+          html += '<div class="empty-state">'+t('noQualifying')+'</div>';
+        } else {
+          html += '<div class="names-list">';
+          list.forEach(function(p){
+            html += '<div class="name-item">' + esc(p.username) + '<span class="name-wager">' + fmt(p.weightedWager) + '</span></div>';
+          });
+          html += '</div>';
+        }
+        html += '</div>';
+      });
+      document.getElementById('wk-content').innerHTML = html;
+    } catch(e){ console.error(e); }
+  }
+
+  window.fetchCustomStats = async function(){
+    var startInput = document.getElementById('stats-start').value;
+    var endInput = document.getElementById('stats-end').value;
+    if(!startInput || !endInput){ alert(t('fillDates')); return; }
+    var startDate = new Date(startInput).toISOString();
+    var endDate = new Date(endInput).toISOString();
+    var btn = document.getElementById('stats-fetch-btn');
+    btn.disabled = true; btn.textContent = t('fetchingStats');
+    try {
+      var res = await authFetch('/api/admin/stats?startDate=' + encodeURIComponent(startDate) + '&endDate=' + encodeURIComponent(endDate));
+      var data = await res.json();
+      if(data.error){
+        document.getElementById('stats-results').innerHTML = '<div class="empty-state" style="color:var(--red)">' + esc(data.error) + '</div>';
+        return;
+      }
+      var html = '<div class="results-info"><span>' + data.count + '</span> ' + t('players') + ' (<span>' + formatDateJST(data.startDate) + '</span> ~ <span>' + formatDateJST(data.endDate) + '</span>)</div>';
+      html += '<div class="scroll-wrap"><table class="data-table"><thead><tr><th>#</th><th>'+t('thUsername')+'</th><th style="text-align:right">'+t('thWager')+'</th><th style="text-align:right">'+t('thReward')+'</th></tr></thead><tbody>';
+      data.data.forEach(function(p){
+        var reward = getReward(p.weightedWager);
+        html += '<tr><td class="rank">'+p.rank+'</td><td class="username">'+esc(p.username)+'</td><td class="wager">'+fmt(p.weightedWager)+'</td><td class="reward">'+(reward>0?fmt(reward):'-')+'</td></tr>';
+      });
+      html += '</tbody></table></div>';
+      document.getElementById('stats-results').innerHTML = html;
+    } catch(e){
+      document.getElementById('stats-results').innerHTML = '<div class="empty-state" style="color:var(--red)">Error: ' + esc(e.message) + '</div>';
+    } finally {
+      btn.disabled = false; btn.textContent = t('fetchStats');
+    }
+  };
+
+  function renderImagePreviews(){
+    var container = document.getElementById('image-previews');
+    container.innerHTML = '';
+    noteImages.forEach(function(url, i){
+      var div = document.createElement('div');
+      div.className = 'image-preview-item';
+      div.innerHTML = '<img src="'+url+'"><button class="remove-img" onclick="removeImage('+i+')">&times;</button>';
+      container.appendChild(div);
+    });
+  }
+
+  window.removeImage = function(i){
+    noteImages.splice(i, 1);
+    renderImagePreviews();
+  };
+
+  async function uploadFile(file){
+    var fd = new FormData();
+    fd.append('image', file);
+    var res = await authFetch('/api/upload', { method: 'POST', body: fd });
+    var data = await res.json();
+    if(data.url) return data.url;
+    throw new Error(data.error || 'アップロード失敗');
+  }
+
+  var dropArea = document.getElementById('image-drop-area');
+  var imageInput = document.getElementById('image-input');
+
+  dropArea.addEventListener('dragover', function(e){ e.preventDefault(); dropArea.style.borderColor='var(--primary)'; });
+  dropArea.addEventListener('dragleave', function(){ dropArea.style.borderColor=''; });
+  dropArea.addEventListener('drop', async function(e){
+    e.preventDefault(); dropArea.style.borderColor='';
+    var files = e.dataTransfer.files;
+    for(var i=0;i<files.length;i++){
+      if(files[i].type.startsWith('image/')){
+        try{ var url = await uploadFile(files[i]); noteImages.push(url); renderImagePreviews(); }catch(err){ alert(err.message); }
+      }
+    }
+  });
+  imageInput.addEventListener('change', async function(){
+    var files = imageInput.files;
+    for(var i=0;i<files.length;i++){
+      try{ var url = await uploadFile(files[i]); noteImages.push(url); renderImagePreviews(); }catch(err){ alert(err.message); }
+    }
+    imageInput.value='';
+  });
+
+  window.showNewNoteForm = function(){
+    document.getElementById('note-edit-id').value = '';
+    document.getElementById('note-title').value = '';
+    document.getElementById('note-tags').value = '';
+    document.getElementById('note-content').value = '';
+    noteImages = [];
+    renderImagePreviews();
+    document.getElementById('note-form').style.display = 'block';
+  };
+
+  window.cancelNote = function(){
+    document.getElementById('note-form').style.display = 'none';
+  };
+
+  window.editNote = async function(id){
+    try {
+      var res = await authFetch('/api/notes/' + id);
+      var note = await res.json();
+      document.getElementById('note-edit-id').value = note.id;
+      document.getElementById('note-title').value = note.title;
+      document.getElementById('note-tags').value = (note.tags || []).join(', ');
+      document.getElementById('note-content').value = note.content;
+      noteImages = note.images || [];
+      renderImagePreviews();
+      document.getElementById('note-form').style.display = 'block';
+    } catch(e){ console.error(e); }
+  };
+
+  window.saveNote = async function(){
+    var id = document.getElementById('note-edit-id').value;
+    var title = document.getElementById('note-title').value.trim();
+    var content = document.getElementById('note-content').value.trim();
+    var tags = document.getElementById('note-tags').value.split(',').map(function(s){return s.trim()}).filter(Boolean);
+    if(!title || !content){ alert(t('titleRequired')); return; }
+    try {
+      var method = id ? 'PUT' : 'POST';
+      var url = id ? '/api/notes/' + id : '/api/notes';
+      await authFetch(url, {
+        method: method,
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({title:title, content:content, tags:tags, images:noteImages})
+      });
+      document.getElementById('note-form').style.display = 'none';
+      loadNotes();
+    } catch(e){ alert(t('saveError') + ': ' + e.message); }
+  };
+
+  window.deleteNote = async function(id){
+    if(!confirm(t('deleteConfirm'))) return;
+    try {
+      await authFetch('/api/notes/' + id, { method: 'DELETE' });
+      loadNotes();
+    } catch(e){ console.error(e); }
+  };
+
+  async function loadNotes(){
+    var container = document.getElementById('notes-list');
+    try {
+      var res = await authFetch('/api/notes');
+      var notes = await res.json();
+      if(!notes.length){
+        container.innerHTML = '<div class="empty-state">'+t('emptyNotes')+'</div>';
+        return;
+      }
+      var html = '';
+      notes.forEach(function(note){
+        var tagsHtml = (note.tags||[]).map(function(s){return '<span class="tag">'+esc(s)+'</span>'}).join('');
+        var imagesHtml = '';
+        if(note.images && note.images.length){
+          imagesHtml = '<div class="note-item__images">';
+          note.images.slice(0,4).forEach(function(u){ imagesHtml += '<img src="'+esc(u)+'" alt="">'; });
+          if(note.images.length > 4) imagesHtml += '<span style="font-size:11px;color:var(--dim);align-self:center">+' + (note.images.length-4) + '</span>';
+          imagesHtml += '</div>';
+        }
+        html += '<div class="note-item">';
+        html += '<div class="note-item__info">';
+        html += '<div class="note-item__title">'+esc(note.title)+'</div>';
+        html += '<div class="note-item__meta"><span>'+formatDateJST(note.createdAt)+'</span>'+tagsHtml+'</div>';
+        html += '<div class="note-item__stats">';
+        html += '<span>👁 '+(note.views||0)+'</span>';
+        html += '<span>♥ '+(note.likes||0)+'</span>';
+        html += '<span>💬 '+((note.comments||[]).length)+'</span>';
+        html += '</div>';
+        html += '<div class="note-item__preview">'+esc(note.content.replace(/\n/g,' ').slice(0,120))+'</div>';
+        html += imagesHtml;
+        html += '</div>';
+        html += '<div class="note-item__actions">';
+        html += '<button class="btn-sm" onclick="editNote(\''+note.id+'\')">'+t('edit')+'</button>';
+        html += '<button class="btn-sm danger" onclick="deleteNote(\''+note.id+'\')">'+t('delete')+'</button>';
+        html += '</div></div>';
+      });
+      container.innerHTML = html;
+    } catch(e){ container.innerHTML = '<div class="empty-state" style="color:var(--red)">'+t('loadError')+'</div>'; }
+  }
+
+  var adminToken = localStorage.getItem('azisai-admin-token') || '';
+  var pendingSessionKey = '';
+
+  function authHeaders(){
+    return { 'x-admin-token': adminToken };
+  }
+
+  function authFetch(url, opts){
+    opts = opts || {};
+    opts.headers = Object.assign({}, opts.headers || {}, authHeaders());
+    return fetch(url, opts).then(function(r){
+      if(r.status === 401){
+        adminToken = '';
+        localStorage.removeItem('azisai-admin-token');
+        showLogin();
+      }
+      return r;
+    });
+  }
+
+  function showLogin(){
+    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('login-step-password').style.display = 'block';
+    document.getElementById('login-step-code').style.display = 'none';
+    document.getElementById('login-error').textContent = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-code').value = '';
+  }
+
+  function hideLogin(){
+    document.getElementById('login-overlay').style.display = 'none';
+    loadLeaderboard();
+    loadWeekly();
+    loadNotes();
+  }
+
+  window.submitPassword = async function(){
+    var pw = document.getElementById('login-password').value;
+    if(!pw) return;
+    var btn = document.getElementById('login-pw-btn');
+    var errEl = document.getElementById('login-error');
+    btn.disabled = true; btn.textContent = lt('loggingIn');
+    errEl.textContent = '';
+    try {
+      var res = await fetch('/api/admin/login', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({password:pw})
+      });
+      var data = await res.json();
+      if(!res.ok){
+        if(res.status === 429) errEl.textContent = lt('tooMany');
+        else errEl.textContent = lt('invalidPw');
+        return;
+      }
+      pendingSessionKey = data.sessionKey;
+      document.getElementById('login-step-password').style.display = 'none';
+      document.getElementById('login-step-code').style.display = 'block';
+      errEl.textContent = '';
+    } catch(e){
+      errEl.textContent = lt('error');
+    } finally {
+      btn.disabled = false; btn.textContent = lt('loginBtn');
+    }
+  };
+
+  window.submitCode = async function(){
+    var code = document.getElementById('login-code').value.trim();
+    if(!code) return;
+    var btn = document.getElementById('login-code-btn');
+    var errEl = document.getElementById('login-error');
+    btn.disabled = true; btn.textContent = lt('verifying');
+    errEl.textContent = '';
+    try {
+      var res = await fetch('/api/admin/verify', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({sessionKey: pendingSessionKey, code: code})
+      });
+      var data = await res.json();
+      if(!res.ok){
+        if(res.status === 429) errEl.textContent = lt('tooMany');
+        else if(data.error && data.error.includes('expired')) errEl.textContent = lt('codeExpired');
+        else errEl.textContent = lt('invalidCode');
+        return;
+      }
+      adminToken = data.token;
+      localStorage.setItem('azisai-admin-token', adminToken);
+      pendingSessionKey = '';
+      hideLogin();
+    } catch(e){
+      errEl.textContent = lt('error');
+    } finally {
+      btn.disabled = false; btn.textContent = lt('verifyBtn');
+    }
+  };
+
+  window.adminLogout = async function(){
+    try { await fetch('/api/admin/logout', { method:'POST', headers: authHeaders() }); } catch(e){}
+    adminToken = '';
+    localStorage.removeItem('azisai-admin-token');
+    showLogin();
+  };
+
+  async function checkSession(){
+    if(!adminToken){ showLogin(); return; }
+    try {
+      var res = await fetch('/api/admin/session', { headers: authHeaders() });
+      var data = await res.json();
+      if(data.valid){
+        hideLogin();
+      } else {
+        adminToken = '';
+        localStorage.removeItem('azisai-admin-token');
+        showLogin();
+      }
+    } catch(e){ showLogin(); }
+  }
+
+  checkSession();
+})();
+</script>
+</body>
+</html>

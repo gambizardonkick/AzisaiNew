@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>AZISAI | Weekly Raffle</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Exclusive wager races on Roobet for code AZISAI07219!">
+    <meta property="og:image" content="">
+    <link rel="icon" type="image/jpg" href="/assets/logo1.png">
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/lb.css">
+    <link rel="stylesheet" type="text/css" href="/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/css/toast.css">
+    <style>
+        /* Your existing custom styles go here */
+        /* Removed body background styles to respect your existing CSS */
+
+        .warning-message {
+            width: 90%;
+            max-width: 500px;
+            margin: 10px auto;
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff4444;
+            border-radius: 4px;
+            padding: 15px;
+            color: #ff4444;
+            font-weight: bold;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        @media screen and (max-width: 768px) {
+            .warning-message {
+                width: 95%;
+                padding: 12px;
+                font-size: 14px;
+                margin: 10px auto;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            margin: 10% auto;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px);
+            transition: transform 0.5s ease;
+            position: relative;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            color: #d1d5db;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .modal-body li {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .modal-body ul {
+            padding-left: 20px;
+        }
+
+        .prev-lb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgb(39, 117, 202);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(39, 117, 202, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prev-lb-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            background: rgb(39, 117, 202);
+            box-shadow: 0 6px 20px rgba(39, 117, 202, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            color: black;
+        }
+
+        .prev-lb-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .prev-lb-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) scaleX(1) rotate(20deg);
+            }
+
+            50% {
+                transform: translateY(-10px) scaleX(1) rotate(20deg);
+            }
+
+            100% {
+                transform: translateY(0px) scaleX(1) rotate(20deg);
+            }
+        }
+
+        @keyframes floatLeft {
+            0% {
+                transform: translateY(0px) scaleX(-1) rotate(20deg);
+            }
+
+            50% {
+                transform: translateY(-10px) scaleX(-1) rotate(20deg);
+            }
+
+            100% {
+                transform: translateY(0px) scaleX(-1) rotate(20deg);
+            }
+        }
+
+        .coin-container {
+            position: relative;
+            height: 0;
+            margin: 0;
+        }
+
+        .coin-left,
+        .coin-right {
+            position: absolute;
+            height: 100px;
+            width: auto;
+            opacity: 0.7;
+            top: -50px;
+        }
+
+        .coin-left {
+            left: 22%;
+            animation: floatLeft 3s ease-in-out infinite;
+        }
+
+        .coin-right {
+            right: 25%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media screen and (max-width: 768px) {
+            .coin-container {
+                display: none;
+            }
+        }
+
+        /* Updated countdown style for raffle */
+        #countdown {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff, 0 0 40px #00eaff;
+            text-align: center;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            #countdown {
+                font-size: 2rem;
+            }
+        }
+
+        /* Styling for the raffle elements */
+        .raffle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            /* Transparent background with a subtle blur effect */
+            background-color: rgba(26, 32, 44, 0.7);
+            /* Slightly transparent dark background */
+            backdrop-filter: blur(5px);
+            /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(5px);
+            /* For Safari */
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Subtle border for transparency */
+        }
+
+        .raffle-container h1,
+        .raffle-container p {
+            color: #fff;
+            text-align: center;
+        }
+
+        .raffle-search-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .raffle-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (min-width: 640px) {
+            .raffle-input-group {
+                flex-direction: row;
+            }
+        }
+
+        .raffle-input-group input {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            background-color: rgba(45, 55, 72, 0.8);
+            /* Transparent input background */
+            color: #e2e8f0;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .raffle-input-group input::placeholder {
+            color: #a0aec0;
+        }
+
+        .raffle-input-group input:focus {
+            border-color: #4299e1;
+        }
+
+        .raffle-input-group button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: #4299e1;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .raffle-input-group button:hover {
+            background-color: #3182ce;
+        }
+
+        #results {
+            background-color: rgba(45, 55, 72, 0.8);
+            /* Transparent results background */
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #e2e8f0;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Subtle border */
+        }
+
+        #ticketContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            background-color: rgba(45, 55, 72, 0.6);
+            /* Transparent ticket container background */
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            /* Subtle border */
+        }
+
+        #ticketContainer>div {
+            padding: 6px;
+            border: 1px solid rgba(74, 85, 104, 0.5);
+            /* Transparent border */
+            border-radius: 8px;
+            background: rgba(74, 85, 104, 0.7);
+            /* Transparent card background */
+            min-width: 80px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            flex-basis: calc(20% - 10px);
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.1s ease-in-out, background 0.2s ease;
+        }
+
+        #ticketContainer>div:hover {
+            transform: translateY(-2px);
+            background: rgba(90, 103, 216, 0.8);
+            /* Highlight on hover with transparency */
+        }
+
+        #loadMore {
+            margin-top: 25px;
+            padding: 12px 30px;
+            background-color: #4299e1;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+
+        #loadMore:hover {
+            background-color: #3182ce;
+        }
+
+        /* New button for live stream announcement */
+        .live-stream-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            /* Vibrant gradient */
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+            flex-wrap: wrap;
+            /* Allow text to wrap on small screens */
+        }
+
+        .live-stream-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.6);
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            /* Reverse gradient on hover */
+        }
+
+        .live-stream-button svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            /* Use button's text color for icon */
+        }
+
+        /* Styles for the weekly winner boxes */
+        .weekly-winner-box {
+            background-color: rgba(45, 55, 72, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        .weekly-winner-box h3 {
+            color: #4299e1;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .weekly-winner-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .weekly-winner-box li span {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(74, 85, 104, 0.7);
+            padding: 7px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast">
+        <span id="message"></span>
+    </div>
+
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Raffle Rules</h2>
+                <span class="close" onclick="closeModal('rulesModal')">×</span>
+            </div>
+            <div class="modal-body">
+                <p>Here are the rules for the Weekly Raffle:</p>
+                <ul>
+                    <li>Every $1,000 wagered on Roobet using **Code AZISAI07219** earns you 1 ticket.</li>
+                    <li>Tickets are updated live as you wager.</li>
+                    <li>The raffle runs from **Saturday 2:00 PM UTC** until **Friday 23:59:59 UTC** every week.</li>
+                    <li>The winner will be announced shortly after the cutoff time.</li>
+                    <li>Ensure you are playing on Roobet with **Code AZISAI07219** for your wagers to count!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <canvas id="particleCanvas"></canvas>
+    <div class="glow-container">
+        <div class="left-glow"></div>
+        <div class="right-glow"></div>
+    </div>
+    <object type="image/png" data="/assets/left.png" id="leftsvg" height="100%">
+    </object>
+    <object type="image/png" data="/assets/right1.png" id="rightsvg" height="100%">
+    </object>
+    <header>
+        <nav>
+            <div class="logo-title">
+                <img src="/assets/logo.png" alt="Site logo" class="logo">
+                <h1 class="title">AZISAI</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">HOME</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="toggle-images" style="margin-top: 50px;">
+        <img class="game-image roobet-image" id="roobetImage" src="/assets/monthly1.png"
+            style="cursor: pointer;opacity: 0.3;" onclick="window.location.href='/leaderboard/roobet'">
+        <div class="vertical-line"></div>
+        <img class="game-image roobet-image" id="roobetImage" src="/assets/weeklyraffle.png"
+            style="cursor: pointer;opacity: 1;" onclick="window.location.href='/raffle'">
+    </div>
+    <div class="toggle-images" style="margin-top: 50px;">
+        <img class="game-image roobet-image" id="roobetImage" src="/assets/roobet.png"
+            style="cursor: pointer;opacity: 1;" onclick="window.location.href='/leaderboard/rainbet'">
+    </div>
+    <br>
+
+    <div data-v-1d580398="" data-v-e4097664="" id="appContent" class="raffle-container">
+        <h1 class="text-4xl font-extrabold mb-2 text-center" style="color: #ffffff;">
+            🎟️ Weekly Clothing Raffle - AZISAI
+        </h1>
+        <p class="text-lg text-center mb-6" style="color: #a0aec0;">
+            Every $1,000 wager gets you 1 ticket. Updated live.
+        </p>
+
+        <div id="countdown" class="text-2xl font-semibold mb-8 p-4 bg-gray-800 rounded-lg shadow-md">
+            Loading countdown...
+        </div>
+
+        <a href="/raffle" target="_blank" class="live-stream-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+            Cashable for $100 each, Three winners each week - RooHats, Rooclothes, Rooshorts.
+        </a>
+
+        <div id="weeklyWinnersContainer" class="raffle-container" style="margin-top: 30px;">
+            <h2 class="text-3xl font-extrabold mb-4 text-center" style="color: #ffffff;">
+                🏆 Weekly Raffle Winners
+            </h2>
+            <div id="winnersDisplay" style="width: 100%;">
+                <div class="weekly-winner-box">
+                    <h3>Week 1 Winners</h3>
+                    <ul>
+                        <li><span style="color: #e2e8f0;">user_one</span></li>
+                        <li><span style="color: #e2e8f0;">user_two</span></li>
+                        <li><span style="color: #e2e8f0;">user_three</span></li>
+                    </ul>
+                </div>
+                <div class="weekly-winner-box">
+                    <h3>Week 2 Winners</h3>
+                    <ul>
+                        <li><span style="color: #e2e8f0;">user_four</span></li>
+                        <li><span style="color: #e2e8f0;">user_five</span></li>
+                        <li><span style="color: #e2e8f0;">user_six</span></li>
+                    </ul>
+                </div>
+                <div class="weekly-winner-box">
+                    <h3>Week 3 Winners</h3>
+                    <ul>
+                        <li><span style="color: #e2e8f0;">user_seven</span></li>
+                        <li><span style="color: #e2e8f0;">user_eight</span></li>
+                        <li><span style="color: #e2e8f0;">user_nine</span></li>
+                    </ul>
+                </div>
+                <div class="weekly-winner-box">
+                    <h3>Week 4 Winners</h3>
+                    <ul>
+                        <li><span style="color: #e2e8f0;">user_ten</span></li>
+                        <li><span style="color: #e2e8f0;">user_eleven</span></li>
+                        <li><span style="color: #e2e8f0;">user_twelve</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="raffle-search-section">
+            <div class="raffle-input-group">
+                <input type="text" id="searchUser" placeholder="Search by username...">
+                <button onclick="searchByUser()">Find Tickets</button>
+            </div>
+
+            <div class="raffle-input-group">
+                <input type="number" id="searchTicket" placeholder="Search by ticket number...">
+                <button onclick="searchByTicket()">Find User</button>
+            </div>
+        </div>
+
+        <div id="results" class="results-display">
+            Search results will appear here.
+        </div>
+
+        <div id="ticketContainer"></div>
+        <button id="loadMore" onclick="loadMore()">Load More</button>
+    </div>
+
+
+    <script>
+        // Modal script
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden";
+                setTimeout(() => {
+                    modal.classList.add("show");
+                }, 10);
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove("show");
+                setTimeout(() => {
+                    modal.style.display = "none";
+                    document.body.style.overflow = "auto";
+                }, 500);
+            }
+        }
+
+        window.onclick = function (event) {
+            const rulesModal = document.getElementById("rulesModal");
+            if (event.target == rulesModal) {
+                closeModal('rulesModal');
+            }
+        }
+
+        // Raffle Specific JavaScript (integrated and adapted)
+        const API = 'https://azisairaffle.onrender.com/raffle/tickets'; // Raffle API
+        const WINNERS_API = 'https://azisairaffle.onrender.com/winners'; // Winners API
+        let tickets = []; // Array to store all fetched tickets
+        let currentIndex = 0; // Tracks the current index for displaying tickets
+        const step = 10; // Number of tickets to display per load
+
+        /**
+         * Fetches tickets from the API and initializes the display.
+         */
+        async function fetchTickets() {
+            try {
+                const res = await fetch(API);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                tickets = await res.json();
+                // Sort tickets by ticket number to ensure consistent display
+                tickets.sort((a, b) => a.ticket - b.ticket);
+                displayTickets(); // Display the initial set of tickets
+            } catch (error) {
+                console.error("Failed to fetch tickets:", error);
+                const resultsDiv = document.getElementById('results');
+                if (resultsDiv) { // Ensure resultsDiv exists before trying to update it
+                    resultsDiv.textContent = "Error loading tickets. Please try again later.";
+                }
+            }
+        }
+
+        /**
+         * Displays a batch of tickets in the ticketContainer.
+         */
+        function displayTickets() {
+            const container = document.getElementById('ticketContainer');
+            const loadMoreButton = document.getElementById('loadMore');
+
+            if (!container) {
+                console.error("Element with ID 'ticketContainer' not found.");
+                return;
+            }
+
+            const slice = tickets.slice(currentIndex, currentIndex + step);
+
+            if (slice.length === 0 && currentIndex === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center w-full">No tickets available yet.</p>';
+                if (loadMoreButton) loadMoreButton.style.display = 'none';
+                return;
+            }
+
+            slice.forEach(t => {
+                const div = document.createElement('div');
+                div.style = 'padding: 10px; border: 1px solid rgba(74, 85, 104, 0.5); border-radius: 8px; background: rgba(74, 85, 104, 0.7); min-width: 100px; color: #e2e8f0; font-size: 0.9rem; font-weight: 600; text-align: center; flex-basis: calc(20% - 10px); box-sizing: border-box; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform 0.1s ease-in-out, background 0.2s ease;';
+                div.textContent = `#${t.ticket} - ${t.username}`;
+                container.appendChild(div);
+            });
+            currentIndex += step;
+
+            if (loadMoreButton) {
+                if (currentIndex >= tickets.length) {
+                    loadMoreButton.style.display = 'none';
+                } else {
+                    loadMoreButton.style.display = 'block';
+                }
+            }
+        }
+
+        /**
+         * Loads more tickets when the "Load More" button is clicked.
+         */
+        function loadMore() {
+            displayTickets();
+        }
+
+        /**
+         * Searches for tickets by username and displays the corresponding ticket numbers.
+         */
+        function searchByUser() {
+            const searchUser = document.getElementById('searchUser');
+            const resultsDiv = document.getElementById('results');
+            if (!searchUser || !resultsDiv) return; // Add checks
+
+            const name = searchUser.value.trim();
+            if (!name) {
+                resultsDiv.textContent = 'Please enter a username to search.';
+                return;
+            }
+            const results = tickets.filter(t => t.username.toLowerCase() === name.toLowerCase());
+            const output = results.map(t => `#${t.ticket}`).join(', ');
+            resultsDiv.textContent = output ? `Tickets for "${name}": ${output}` : `No tickets found for "${name}".`;
+        }
+
+        /**
+         * Searches for a username by ticket number and displays the username.
+         */
+        function searchByTicket() {
+            const searchTicket = document.getElementById('searchTicket');
+            const resultsDiv = document.getElementById('results');
+            if (!searchTicket || !resultsDiv) return; // Add checks
+
+            const ticketInput = searchTicket.value;
+            if (!ticketInput) {
+                resultsDiv.textContent = 'Please enter a ticket number to search.';
+                return;
+            }
+            const ticket = parseInt(ticketInput);
+            if (isNaN(ticket)) {
+                resultsDiv.textContent = 'Invalid ticket number. Please enter a valid number.';
+                return;
+            }
+            const result = tickets.find(t => t.ticket === ticket);
+            resultsDiv.textContent = result ? `Ticket #${ticket} belongs to: ${result.username}` : `Ticket #${ticket} not found.`
+        }
+
+        /**
+         * Masks a username, showing the first two and last two characters, with asterisks in between.
+         * @param {string} username - The username to mask.
+         * @returns {string} The masked username.
+         */
+        function maskUsername(username) {
+            if (username.length <= 4) {
+                return username.substring(0, 2) + '***'; // Or handle shorter usernames differently
+            }
+            return username.substring(0, 2) + '***' + username.substring(username.length - 2);
+        }
+
+        /**
+         * Helper function to create a Date object at a specific day, hour, and minute in JST
+         */
+        function getJstDate(day, hour, minute) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth(); // 0-indexed month
+
+            // JST is UTC+9. To get a specific JST time, we convert it to UTC.
+            // For example, 11 AM JST is 2 AM UTC (11 - 9).
+            const utcHour = hour - 9;
+
+            // Create a Date object in UTC
+            return new Date(Date.UTC(year, month, day, utcHour, minute, 0, 0));
+        }
+
+        function updateCountdownAndWinnerButton() {
+            const now = new Date(); // Current local time in milliseconds from epoch
+
+            // Define your week windows using the new getJstDate helper
+            const year = now.getFullYear();
+            const month = now.getMonth();
+
+            const weekWindows = [
+                // Week 1: Saturday 15:01 JST to Sunday 03:01 JST
+                { week: 1, start: getJstDate(8, 0, 1), end: getJstDate(8, 12, 1) },
+                // Week 2: Saturday 15:01 JST to Sunday 03:01 JST
+                { week: 2, start: getJstDate(15, 0, 1), end: getJstDate(15, 12, 1) },
+                // Week 3: Saturday 15:01 JST to Sunday 03:01 JST
+                { week: 3, start: getJstDate(22, 0, 1), end: getJstDate(22, 12, 1) },
+                // Week 4: Saturday 15:01 JST to Sunday 03:01 JST
+                {
+                    week: 4,
+                    start: getJstDate(29, 0, 1),
+                    end: getJstDate(month === 11 ? new Date(year + 1, 0, 1).getDate() : new Date(year, month + 1, 0).getDate(), 0, 1) // Handles month end
+                }
+            ];
+
+            const countdownElement = document.getElementById('countdown');
+            if (!countdownElement) return;
+
+            // Countdown logic, now comparing 'now' (which is local time, but its getTime() is UTC)
+            // with JST target times (which are converted to UTC by getJstDate)
+            const phaseTimes = [
+                { end: getJstDate(1, 0, 1), label: `🎯 Next raffle starts in:` },
+                { end: getJstDate(7, 23, 59), label: `📊 Last month results displayed till, no more raffles:` },
+                { end: getJstDate(8, 11, 59), label: `🕒 Check the "Weekly Raffle Winners" section below for Week 1 winners! Week 2 starts in:` },
+                { end: getJstDate(14, 23, 59), label: `📊 Week 2 ends in:` },
+                { end: getJstDate(15, 11, 59), label: `🕒 Check the "Weekly Raffle Winners" section below for Week 2 winners! Week 3 starts in:` },
+                { end: getJstDate(21, 23, 59), label: `📊 Week 3 ends in:` },
+                { end: getJstDate(22, 11, 59), label: `🕒 Check the "Weekly Raffle Winners" section below for Week 3 winners! Week 4 starts in:` },
+                { end: getJstDate(28, 23, 59), label: `📊 Week 4 ends in:` },
+                { end: getJstDate(29, 11, 59), label: `🕒 Check the "Weekly Raffle Winners" section below for Week 4 winners! Raffle for this month ends in:` }
+            ];
+
+            let targetPhase = null;
+            for (let i = 0; i < phaseTimes.length; i++) {
+                // Compare 'now' (which is effectively UTC milliseconds) with the UTC representation of JST phase ends
+                if (now.getTime() < phaseTimes[i].end.getTime()) {
+                    targetPhase = phaseTimes[i];
+                    break;
+                }
+            }
+
+            if (!targetPhase) {
+                const nextMonth = month === 11 ? 0 : month + 1;
+                const nextYear = month === 11 ? year + 1 : year;
+                // Next raffle starts on the 1st of the next month at 00:01 JST (which is previous day 15:01 UTC)
+                const nextStartJST = new Date(year, month + 1, 1, 0, 1); // This creates it in local time
+                const nextStartUTC = new Date(Date.UTC(nextYear, nextMonth, 1, 0 - 9, 1)); // Correct UTC for JST 00:01
+                const diff = nextStartUTC.getTime() - now.getTime();
+                if (diff < 0) { // If next month's start has already passed this hour
+                    countdownElement.textContent = "Raffle ended for this month. Stay tuned for next month's raffle!";
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    countdownElement.textContent = `🎯 Next raffle starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+            } else {
+                const diff = targetPhase.end.getTime() - now.getTime();
+                if (diff < 0) {
+                    countdownElement.textContent = "Time has passed for this phase. Refreshing...";
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    countdownElement.textContent = `${targetPhase.label} ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+            }
+        }
+
+
+        // Function to fetch and display weekly winners
+        async function displayWeeklyWinners() {
+            try {
+                const res = await fetch(WINNERS_API); // WINNERS_API is already defined
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                let weeklyData = await res.json();
+
+                const winnersDisplayDiv = document.getElementById('winnersDisplay');
+                if (!winnersDisplayDiv) {
+                    console.error("Element with ID 'winnersDisplay' not found.");
+                    return;
+                }
+                winnersDisplayDiv.innerHTML = ''; // Clear previous content
+
+                if (weeklyData.length === 0) {
+                    winnersDisplayDiv.innerHTML = '<p class="text-gray-500 text-center w-full">No weekly winners announced yet.</p>';
+                    return;
+                }
+
+                // Sort by week number in ascending order
+                weeklyData.sort((a, b) => a.week - b.week);
+
+                weeklyData.forEach(weekEntry => {
+                    const weekBox = document.createElement('div');
+                    weekBox.className = 'weekly-winner-box'; // Add a class for styling
+
+                    const weekTitle = document.createElement('h3');
+                    weekTitle.textContent = `Week ${weekEntry.week} Winners`;
+                    weekBox.appendChild(weekTitle);
+
+                    const winnersList = document.createElement('ul');
+
+                    if (weekEntry.winners && weekEntry.winners.length > 0) {
+                        // Sort winners within the week by ticket number (this sort can remain even if not displayed)
+                        weekEntry.winners.sort((a, b) => a.ticket - b.ticket);
+                        weekEntry.winners.forEach(winner => {
+                            const listItem = document.createElement('li');
+                            // --- MODIFIED LINE BELOW ---
+                            listItem.innerHTML = `<span style="color: #e2e8f0;">${maskUsername(winner.username)}</span>`;
+                            winnersList.appendChild(listItem);
+                        });
+                    } else {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<span style="color: #a0aec0;">Winners for this week will be announced soon!</span>`;
+                        winnersList.appendChild(listItem);
+                    }
+                    weekBox.appendChild(winnersList);
+                    winnersDisplayDiv.appendChild(weekBox);
+                });
+            } catch (error) {
+                console.error("Failed to fetch weekly winners:", error);
+                const winnersDisplayDiv = document.getElementById('winnersDisplay');
+                if (winnersDisplayDiv) {
+                    winnersDisplayDiv.innerHTML = '<p class="text-red-400 text-center w-full">Error loading weekly winners. Please try again later.</p>';
+                }
+            }
+        }
+
+
+        // Initial calls
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTickets();
+            updateCountdownAndWinnerButton();
+            displayWeeklyWinners(); // Call the new function to display winners
+            setInterval(updateCountdownAndWinnerButton, 1000); // Update countdown every second
+        });
+
+        // Particle effect script (unchanged, for completeness)
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        canvas.width = window.innerWidth;
+        canvas.height = document.body.scrollHeight; // Set canvas height to content height
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = document.body.scrollHeight;
+            createParticles();
+        });
+
+        class Particle {
+            constructor(x, y, size, speedX, speedY, color) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.speedX = speedX;
+                this.speedY = speedY;
+                this.color = color;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.size > 0.2) this.size -= 0.1;
+                if (this.y > canvas.height + 50 || this.y < -50 || this.x > canvas.width + 50 || this.x < -50) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 5 + 1;
+                    this.speedX = Math.random() * 3 - 1.5;
+                    this.speedY = Math.random() * 3 - 1.5;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height,
+                    Math.random() * 5 + 1,
+                    Math.random() * 3 - 1.5,
+                    Math.random() * 3 - 1.5,
+                    'rgba(255, 255, 255, 0.8)'
+                ));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        createParticles();
+        animateParticles();
+    </script>
+</body>
+
+</html>
